@@ -2,10 +2,6 @@
 
 Syncing dom with webgl
 
-## Goal
-
-Easily recreate the dom in WebGl
-
 ## Based on
 
 - Lenis by studio freight
@@ -14,8 +10,8 @@ Easily recreate the dom in WebGl
 
 ## Status
 
-[] Camera
-[] Image
-[] Images
-[] Text
-[] 3D models
+- [x] Camera
+- [ ] Image
+- [ ] Images
+- [ ] Text
+- [ ] 3D models

@@ -1,8 +1,21 @@
-# React + Vite
+# react-domgl
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Syncing dom with webgl
 
-Currently, two official plugins are available:
+## Goal
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Easily recreate the dom in WebGl
+
+## Based on
+
+- Lenis by studio freight
+- react-three-fiber
+- Three.js
+
+## Status
+
+[] Camera
+[] Image
+[] Images
+[] Text
+[] 3D models

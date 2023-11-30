@@ -11,6 +11,7 @@ Syncing dom with webgl
 ## Status
 
 - [x] Camera
+- [ ] Video
 - [ ] Image
 - [ ] Images
 - [ ] Text

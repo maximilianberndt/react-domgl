@@ -1,30 +1,16 @@
-import { useWindowSize } from 'usehooks-ts'
-import { useFrame, useThree } from "@react-three/fiber"
+import { useThree } from "@react-three/fiber"
 import { useLenis } from "@studio-freight/react-lenis"
-import React, { useMemo, useRef } from "react"
+import React from "react"
+import useSceneSize from '../hooks/useSceneSize'
 
 const GlCamera = () =>{
-    const scrollRef = useRef(0)
+    const {scaleFactor} = useSceneSize()
+    const {camera} = useThree()
     
-    const { camera } = useThree()
-    const { width, height } = useWindowSize()
-
-    const sceneSize = useMemo(() => {
-        const fov = camera.fov * (Math.PI / 180);
-        const height = 2 * Math.tan(fov / 2) * camera.position.z;
-		const width = height * camera.aspect;
-
-        return {width, height}
-    }, [width, height, camera])
-
-    useLenis(({ scroll }) =>  scrollRef.current = scroll)
-    
-    useFrame(({ camera }) =>{
+    useLenis(({ scroll }) =>  {
         if(!camera) return
-
-        const scaleFactor = sceneSize.height / height
-        camera.position.y = -scrollRef.current * scaleFactor
-    })
+        camera.position.y = -scroll * scaleFactor.y
+    }, [scaleFactor])
 
     return (
         <></>

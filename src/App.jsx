@@ -12,8 +12,10 @@ function App() {
           <img 
             ref={ref} 
             src="/test.png"
-            style={{width: "30vw", position: "absolute", top: "30%", left: "30%"}} 
+            style={{width: "30vw", position: "absolute", top: "10%", left: "10%", aspectRatio: "1 / 1"}} 
           />
+
+          <h1 style={{position: "absolute", top: "30%", left: "30%", fontSize: "20vw"}}>Test</h1>
         </GlImage>
     </GlRoot>
   )

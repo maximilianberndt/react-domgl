@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
 import useSceneSize from "./useSceneSize"
+import { useLenis } from "@studio-freight/react-lenis";
 
 const updateX = (plane, offset = 0, bounds, scaleFactor, sceneSize) => {
     const x = bounds.left - offset
@@ -22,6 +23,7 @@ const updateScale = (plane, bounds, scaleFactor) => {
 
 const useSyncDomGl = (glElement, domElement) => {
     const { scaleFactor, sceneSize } = useSceneSize()
+    const lenis = useLenis()
 
     useEffect(() =>{
         if(!domElement || !glElement) return
@@ -29,9 +31,12 @@ const useSyncDomGl = (glElement, domElement) => {
         domElement.style.visibility = "hidden"
         const bounds = domElement.getBoundingClientRect()
 
-       updateScale(glElement, bounds, scaleFactor)
-       updateX(glElement, 0, bounds, scaleFactor, sceneSize)
-       updateY(glElement, 0, bounds, scaleFactor, sceneSize)
+        // TODO: The scrollbar is fucking up the size calculation 
+        // So the webgl element is slightly smaller
+
+        updateScale(glElement, bounds, scaleFactor)
+        updateX(glElement, 0, bounds, scaleFactor, sceneSize)
+        updateY(glElement, -lenis.scroll, bounds, scaleFactor, sceneSize)
     }, [glElement, domElement, scaleFactor.x, scaleFactor.y])
 }
 

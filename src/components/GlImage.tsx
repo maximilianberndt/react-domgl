@@ -6,7 +6,9 @@ import useSyncDomGl from "../hooks/useSyncDomGl"
 const GlImage = ({ children }) => {
     const ref = useRef()
 
-    useSyncDomGl(ref.current, children.ref.current)
+    // TODO: Cleanup this
+    useSyncDomGl(ref.current, children?.ref?.current || children.find(el => el.type === "img").ref.current)
+
 
     return (
         <>

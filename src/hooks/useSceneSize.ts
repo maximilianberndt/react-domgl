@@ -1,6 +1,7 @@
 import { useThree } from "@react-three/fiber";
 import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
+import { glStore } from "../components/GlRoot";
 
 
 
@@ -9,11 +10,19 @@ const useSceneSize = (): {
     windowSize: { width: number, height: number},
     scaleFactor: {x: number, y: number}
 } => {
-    const { camera } = useThree()
+    const camera = glStore(s => s.camera)
     const windowSize = useWindowSize()
 
     // TODO: Should this be a memo or a ref?
     const sceneSize = useMemo(() => {
+        if(!camera) return { 
+            sceneSize: { width:  1, height: 1 },
+            windowSize,
+            scaleFactor: {
+                x: 1,
+                y: 1
+            }
+        }
         const fov = camera.fov * (Math.PI / 180);
         const height = 2 * Math.tan(fov / 2) * camera.position.z;
 		const width = height * camera.aspect;

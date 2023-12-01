@@ -1,6 +1,6 @@
 # react-domgl
 
-Syncing dom with webgl
+Easily recreate the dom in webgl
 
 ## Based on
 
@@ -11,8 +11,8 @@ Syncing dom with webgl
 ## Status
 
 - [x] Camera
+- [x] Image
 - [ ] Video
-- [ ] Image
 - [ ] Images
 - [ ] Text
 - [ ] 3D models

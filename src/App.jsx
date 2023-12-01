@@ -12,7 +12,7 @@ function App() {
           <img 
             ref={ref} 
             src="/test.png"
-            style={{width: "30vw", position: "absolute", top: "30%", left: "50%", transform: "translate(-50%, -50%)"}} 
+            style={{width: "30vw", position: "absolute", top: "30%", left: "30%"}} 
           />
         </GlImage>
     </GlRoot>

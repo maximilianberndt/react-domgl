@@ -1,24 +1,12 @@
-import React, { Fragment, useEffect, useRef } from "react"
+import React, { useRef } from "react"
 import {glTunnel} from "./GlRoot"
-import useSceneSize from "../hooks/useSceneSize"
+import useSyncDomGl from "../hooks/useSyncDomGl"
+
 
 const GlImage = ({ children }) => {
     const ref = useRef()
-    const { scaleFactor } = useSceneSize()
 
-    useEffect(() =>{
-        const el = children.ref.current
-        const plane = ref.current
-        if(!el || !plane) return
-
-        el.style.visibility = "hidden"
-        const bounds = el.getBoundingClientRect()
-
-        plane.scale.x = bounds.width * scaleFactor.x
-        plane.scale.y = bounds.height * scaleFactor.y
-
-        console.log(plane.scale, bounds.width, bounds.height)
-    }, [children, scaleFactor.x, scaleFactor.y])
+    useSyncDomGl(ref.current, children.ref.current)
 
     return (
         <>

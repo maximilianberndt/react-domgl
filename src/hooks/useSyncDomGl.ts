@@ -33,10 +33,14 @@ const useSyncDomGl = (glElement, domElement) => {
 
         // TODO: The scrollbar is fucking up the size calculation 
         // So the webgl element is slightly smaller
-
         updateScale(glElement, bounds, scaleFactor)
         updateX(glElement, 0, bounds, scaleFactor, sceneSize)
         updateY(glElement, -lenis.scroll, bounds, scaleFactor, sceneSize)
+
+        // Update uniforms automatically
+        // TODO: Chck first if these values exist
+        glElement.material.uniforms.uPlaneSizes.value = glElement.scale
+        glElement.material.uniforms.uImageSizes.value = [bounds.width, bounds.height]
     }, [glElement, domElement, scaleFactor.x, scaleFactor.y])
 }
 

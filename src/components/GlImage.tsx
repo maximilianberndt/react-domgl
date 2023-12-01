@@ -1,13 +1,29 @@
-import React, { useRef } from "react"
-import {glTunnel} from "./GlRoot"
+import React, { useEffect, useMemo, useRef } from "react"
+import vertexShader from "../glsl/base/vert.glsl"
+import fragmentShader from "../glsl/base/frag.glsl"
+import {glTunnel, textureLoader} from "./GlRoot"
 import useSyncDomGl from "../hooks/useSyncDomGl"
-
 
 const GlImage = ({ children }) => {
     const ref = useRef()
+    const image = children?.ref?.current
 
-    // TODO: Cleanup this
-    useSyncDomGl(ref.current, children?.ref?.current || children.find(el => el.type === "img").ref.current)
+    const uniforms = useMemo(() => ({
+        uPlaneSizes: {value: [1, 1]},
+        uImageSizes: {value: [1,1]},
+        tMap: {value: {}}
+    }), [])
+
+    useSyncDomGl(ref.current, image)
+
+    useEffect(() => {
+        const src = image?.src
+        if(src) {
+            textureLoader.load(src, (data) => {
+                uniforms.tMap.value = data
+            })
+        }
+    }, [image])
 
 
     return (
@@ -15,7 +31,11 @@ const GlImage = ({ children }) => {
             <glTunnel.In>
                 <mesh ref={ref}>
                     <planeGeometry args={[1, 1, 1]} />
-                    <meshBasicMaterial color={'orange'} />
+                    <shaderMaterial 
+                        uniforms={uniforms} 
+                        fragmentShader={fragmentShader} 
+                        vertexShader={vertexShader}
+                    />
                 </mesh>
             </glTunnel.In>
             

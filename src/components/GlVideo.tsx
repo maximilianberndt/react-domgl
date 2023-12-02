@@ -21,7 +21,6 @@ const GlVideo = ({ children }) => {
         if(video) uniforms.tMap.value = new VideoTexture( video )
     }, [video])
 
-
     return (
         <>
             <glTunnel.In>

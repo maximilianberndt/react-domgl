@@ -12,7 +12,7 @@ Easily recreate the dom in webgl
 
 - [x] Camera
 - [x] Image
-- [ ] Video
+- [x] Video
 - [ ] Images
 - [ ] Text
 - [ ] 3D models

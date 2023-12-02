@@ -18,7 +18,12 @@ export const glStore = create(()=> ({
 
 const GlRoot = ({children}) => {
     return (
-        <ReactLenis root>
+        <ReactLenis root options={{
+            // gestureOrientation: 'both',
+            smoothWheel: true,
+            // smoothTouch: true,
+            syncTouch: true,}}
+        >
             <Canvas 
                 flat
                 linear 

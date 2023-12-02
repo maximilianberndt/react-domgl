@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useRef } from "react"
 import vertexShader from "../glsl/base/vert.glsl"
 import fragmentShader from "../glsl/base/frag.glsl"
-import {glTunnel, textureLoader} from "./GlRoot"
+import {glTunnel} from "./GlRoot"
 import useSyncDomGl from "../hooks/useSyncDomGl"
+import { VideoTexture } from "three"
 
-const GlImage = ({ children }) => {
+const GlVideo = ({ children }) => {
     const ref = useRef()
-    const image = children?.ref?.current
+    const video = children?.ref?.current
 
     const uniforms = useMemo(() => ({
         uPlaneSizes: {value: [1, 1]},
@@ -14,22 +15,23 @@ const GlImage = ({ children }) => {
         tMap: {value: {}}
     }), [])
 
-    useSyncDomGl(ref.current, image)
+    useSyncDomGl(ref.current, video)
 
     useEffect(() => {
-        const src = image?.src
-        if(src) {
-            textureLoader.load(src, (data) => {
-                uniforms.tMap.value = data
-            })
-        }
-    }, [image])
+        if(video) uniforms.tMap.value = new VideoTexture( video )
+    }, [video])
 
 
     return (
         <>
             <glTunnel.In>
-                <mesh ref={ref}>
+                <mesh 
+                    ref={ref} 
+                    onClick={() =>{
+                        if(!video) return
+                        video.paused ? video.play() : video.pause()
+                    }}
+                >
                     <planeGeometry args={[1, 1, 1]} />
                     <shaderMaterial 
                         uniforms={uniforms} 
@@ -44,4 +46,4 @@ const GlImage = ({ children }) => {
     )
 }
 
-export default GlImage
+export default GlVideo

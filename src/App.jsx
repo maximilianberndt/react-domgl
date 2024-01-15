@@ -39,12 +39,11 @@ function App() {
             style={{
               fontSize: '20vw',
               position: 'absolute',
-              top: '30%',
-              left: '20%',
-              lineHeight: 1.2,
+              top: '300px',
+              left: '200px',
             }}
           >
-            Test
+            Test Test Test
           </h1>
         </GlText>
       </div>

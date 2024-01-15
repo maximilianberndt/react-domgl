@@ -19,9 +19,13 @@ const GlText = ({ children }) => {
 
     setStyle({
       fontSize: parseFloat(s.fontSize) * scaleFactor.x,
-      color: s.color,
+      maxWidth: parseFloat(s.width) * scaleFactor.x,
       lineHeight:
-        s.lineHeight === 'normal' ? 1.2 : parseFloat(s.lineHeight),
+        s.lineHeight === 'normal' ? 1 : parseFloat(s.lineHeight),
+      color: s.color,
+      fontWeight: s.fontWeight,
+      fontStyle: s.fontStyle,
+      textAlign: s.textAlign,
     })
   }, [text, scaleFactor])
 
@@ -31,9 +35,9 @@ const GlText = ({ children }) => {
         <Text
           ref={ref}
           {...style}
-          anchorX={'left'}
-          anchorY={'middle'}
-          //   color={'pink'}
+          anchorX={style.textAlign || 'left'}
+          anchorY={'top'}
+          overflowWrap="break-word"
         >
           {text?.innerText}
         </Text>

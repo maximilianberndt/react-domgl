@@ -1,13 +1,13 @@
 import { useLenis } from '@studio-freight/react-lenis'
 import { useEffect } from 'react'
 import { Mesh } from 'three'
-import useSceneSize from './useSceneSize'
+import useSceneSize, { ScaleFactor } from './useSceneSize'
 
 const updateX = (
-  plane,
+  plane: Mesh,
   offset = 0,
-  bounds,
-  scaleFactor,
+  bounds: DOMRect,
+  scaleFactor: ScaleFactor,
   sceneSize
 ) => {
   const x = bounds.left - offset
@@ -17,10 +17,10 @@ const updateX = (
 }
 
 const updateY = (
-  plane = Mesh,
+  plane: Mesh,
   offset = 0,
-  bounds,
-  scaleFactor,
+  bounds: DOMRect,
+  scaleFactor: ScaleFactor,
   sceneSize
 ) => {
   const y = bounds.top - offset
@@ -29,7 +29,11 @@ const updateY = (
   plane.position.y = sceneOffset - y * scaleFactor.y
 }
 
-const updateScale = (plane, bounds, scaleFactor) => {
+const updateScale = (
+  plane: Mesh,
+  bounds: DOMRect,
+  scaleFactor: ScaleFactor
+) => {
   plane.scale.x = bounds.width * scaleFactor.x
   plane.scale.y = bounds.height * scaleFactor.y
 }

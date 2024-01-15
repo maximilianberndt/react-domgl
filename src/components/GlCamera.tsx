@@ -7,7 +7,7 @@ import { glStore } from "./GlRoot"
 const GlCamera = () =>{
     const {scaleFactor} = useSceneSize()
     const { camera } = useThree()
-    
+
     useLenis(({ scroll }) =>  {
         if(!camera) return
         camera.position.y = -scroll * scaleFactor.y
@@ -18,6 +18,7 @@ const GlCamera = () =>{
     }, [camera])
 
     return (
+        // <perspectiveCamera  manual makeDefault position={[0,0, -5]} fov={75}/>
         <></>
     )
 }

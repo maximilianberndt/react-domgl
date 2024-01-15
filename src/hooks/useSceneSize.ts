@@ -3,8 +3,6 @@ import { useMemo } from "react";
 import { useWindowSize } from "usehooks-ts";
 import { glStore } from "../components/GlRoot";
 
-
-
 const useSceneSize = (): {
     sceneSize: { width: number, height: number},
     windowSize: { width: number, height: number},

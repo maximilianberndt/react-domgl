@@ -27,8 +27,8 @@ const GlRoot = ({children}) => {
             <Canvas 
                 flat
                 linear 
-                style={{position: "fixed", top: 0, left: 0}} 
-                camera={{fov: 75, position: [0, 0, 5]}}
+                style={{position: "fixed", top: 0, left: 0, right: 0, height: "100vh"}} 
+                // camera={{manual: true}}
             >
                 <GlCamera />
                 <glTunnel.Out />

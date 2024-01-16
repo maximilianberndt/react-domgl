@@ -21,7 +21,8 @@ const GlRoot = ({ children }) => {
       options={{
         // gestureOrientation: 'both',
         smoothWheel: true,
-        // smoothTouch: true,
+        smoothTouch: true,
+        wheelEventsTarget: document.body,
         syncTouch: true,
       }}
     >

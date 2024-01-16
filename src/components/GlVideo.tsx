@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef } from 'react'
-import { VideoTexture } from 'three'
+import { Mesh, VideoTexture } from 'three'
 import fragmentShader from '../glsl/base/frag.glsl'
 import vertexShader from '../glsl/base/vert.glsl'
 import useSyncDomGl from '../hooks/useSyncDomGl'
-import { glTunnel } from './GlRoot'
+import GlElement from './GlElement'
 
 const GlVideo = ({ children }) => {
-  const ref = useRef()
+  const ref = useRef<Mesh>(null)
   const video = children?.ref?.current
 
   const uniforms = useMemo(
@@ -26,7 +26,7 @@ const GlVideo = ({ children }) => {
 
   return (
     <>
-      <glTunnel.In>
+      <GlElement>
         <mesh
           ref={ref}
           onClick={() => {
@@ -41,7 +41,7 @@ const GlVideo = ({ children }) => {
             vertexShader={vertexShader}
           />
         </mesh>
-      </glTunnel.In>
+      </GlElement>
 
       {children}
     </>

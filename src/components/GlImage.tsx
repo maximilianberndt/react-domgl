@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo, useRef } from 'react'
+import { Mesh } from 'three'
 import fragmentShader from '../glsl/base/frag.glsl'
 import vertexShader from '../glsl/base/vert.glsl'
 import useSyncDomGl from '../hooks/useSyncDomGl'
-import { glTunnel, textureLoader } from './GlRoot'
+import GlElement from './GlElement'
+import { textureLoader } from './GlRoot'
 
 const GlImage = ({ children }) => {
-  const ref = useRef()
+  const ref = useRef<Mesh>(null)
   const image = children?.ref?.current
 
   const uniforms = useMemo(
@@ -30,7 +32,7 @@ const GlImage = ({ children }) => {
 
   return (
     <>
-      <glTunnel.In>
+      <GlElement>
         <mesh ref={ref}>
           <planeGeometry args={[1, 1, 1]} />
           <shaderMaterial
@@ -39,7 +41,7 @@ const GlImage = ({ children }) => {
             vertexShader={vertexShader}
           />
         </mesh>
-      </glTunnel.In>
+      </GlElement>
 
       {children}
     </>

@@ -46,7 +46,6 @@ const GlText = ({ children, font }) => {
           anchorY={-0.485}
           overflowWrap="break-word"
           font={font}
-          color="hotpink"
         >
           {text?.innerText}
         </Text>

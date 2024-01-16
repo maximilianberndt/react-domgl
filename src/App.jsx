@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { useLenis } from '@studio-freight/react-lenis'
 import { useEffect, useRef } from 'react'
 import { Vector2 } from 'three'
+import { GlElement } from './components/GlElement'
 import GlImage from './components/GlImage'
 import GlRoot from './components/GlRoot'
 import GlText from './components/GlText'
@@ -74,9 +75,9 @@ function App() {
   return (
     <GlRoot>
       <div style={{ height: '200vh', fontSize: '100px' }}>
-        {/* <GlElement>
+        <GlElement>
           <Object />
-        </GlElement> */}
+        </GlElement>
 
         <GlImage>
           <img

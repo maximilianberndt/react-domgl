@@ -2,6 +2,10 @@
 
 Easily recreate the dom in webgl
 
+## Demo
+
+(https://mbe-domgl.netlify.app/)[https://mbe-domgl.netlify.app/]
+
 ## Based on
 
 - Lenis by studio freight
@@ -13,6 +17,7 @@ Easily recreate the dom in webgl
 - Fix Text position
 - Add post processing
 - Make mesh to render to optional prop of GlImage and GlVideo
+- Global loading progress
 
 ## Status
 

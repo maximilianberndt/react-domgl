@@ -64,7 +64,7 @@ const useSyncDomGl = (
       domElement.style.visibility = 'hidden'
     } else {
       // isText
-      // domElement.style.color = 'transparent'
+      domElement.style.color = 'transparent'
     }
     const bounds = domElement.getBoundingClientRect()
 

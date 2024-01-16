@@ -8,11 +8,17 @@ Easily recreate the dom in webgl
 - react-three-fiber
 - Three.js
 
+## TODO
+
+- Fix Text position
+- Add post processing
+- Make mesh to render to optional prop of GlImage and GlVideo
+
 ## Status
 
 - [x] Camera
 - [x] Image
 - [x] Video
+- [x] Text
 - [ ] Images
-- [ ] Text
 - [ ] 3D models

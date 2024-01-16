@@ -34,6 +34,7 @@ const GlVideo = ({ children }) => {
             video.paused ? video.play() : video.pause()
           }}
         >
+          {/* TODO: Make target geometry optional */}
           <planeGeometry args={[1, 1, 1]} />
           <shaderMaterial
             uniforms={uniforms}

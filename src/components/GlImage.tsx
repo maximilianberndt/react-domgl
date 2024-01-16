@@ -34,6 +34,7 @@ const GlImage = ({ children }) => {
     <>
       <GlElement>
         <mesh ref={ref}>
+          {/* TODO: Make target geometry optional */}
           <planeGeometry args={[1, 1, 1]} />
           <shaderMaterial
             uniforms={uniforms}

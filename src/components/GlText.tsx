@@ -17,8 +17,10 @@ const GlText = ({ children, font }) => {
     if (!text) return
     const s = getComputedStyle(text)
 
+    const fontSize = parseFloat(s.fontSize)
+
     setStyle({
-      fontSize: parseFloat(s.fontSize) * scaleFactor.x,
+      fontSize: fontSize * scaleFactor.x,
       maxWidth: parseFloat(s.width) * scaleFactor.x,
       lineHeight:
         s.lineHeight === 'normal' ? 1.2 : parseFloat(s.lineHeight),
@@ -38,10 +40,13 @@ const GlText = ({ children, font }) => {
         <Text
           ref={ref}
           {...style}
-          anchorX={style.textAlign}
-          anchorY={'top'}
+          // TODO: Anchor offset is dependent on aspect ratio and probably font family as well
+          // SO this might need to be adjustable per font
+          anchorX={0.5}
+          anchorY={-0.485}
           overflowWrap="break-word"
           font={font}
+          color="hotpink"
         >
           {text?.innerText}
         </Text>

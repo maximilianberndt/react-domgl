@@ -40,12 +40,18 @@ const updateScale = (
 
 type SyncOptions = {
   syncScale?: boolean
+  offsetX: { current: number }
+  offsetY: { current: number }
 }
 
 const useSyncDomGl = (
   glElement: Mesh,
   domElement: HTMLElement,
-  { syncScale = false }: SyncOptions = {}
+  {
+    syncScale = false,
+    offsetX = { current: 0 },
+    offsetY = { current: 0 },
+  }: SyncOptions = {}
 ) => {
   const { scaleFactor, sceneSize } = useSceneSize()
   const lenis = useLenis()
@@ -58,15 +64,27 @@ const useSyncDomGl = (
       domElement.style.visibility = 'hidden'
     } else {
       // isText
-      domElement.style.color = 'transparent'
+      // domElement.style.color = 'transparent'
     }
     const bounds = domElement.getBoundingClientRect()
 
     // TODO: The scrollbar is fucking up the size calculation
     // So the webgl element is slightly smaller
     syncScale && updateScale(glElement, bounds, scaleFactor)
-    updateX(glElement, 0, bounds, scaleFactor, sceneSize)
-    updateY(glElement, -lenis.scroll, bounds, scaleFactor, sceneSize)
+    updateX(
+      glElement,
+      offsetX.current,
+      bounds,
+      scaleFactor,
+      sceneSize
+    )
+    updateY(
+      glElement,
+      -lenis.scroll + offsetY.current,
+      bounds,
+      scaleFactor,
+      sceneSize
+    )
 
     // Update uniforms automatically
     if (

@@ -5,6 +5,7 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import tunnel from 'tunnel-rat'
 import { create } from 'zustand'
 import GlCamera from './GlCamera'
+import PostProcessing, { PostProcessingProps } from './PostProcessing'
 
 export const textureLoader = new TextureLoader()
 
@@ -14,7 +15,15 @@ export const glStore = create(() => ({
   camera: null,
 }))
 
-const GlRoot = ({ children }) => {
+interface GlRootProps extends PostProcessingProps {
+  children: JSX.Element[] | JSX.Element
+}
+
+const GlRoot = ({
+  children,
+  passes = [],
+  effectComposerProps,
+}: GlRootProps) => {
   return (
     <ReactLenis
       root
@@ -41,6 +50,11 @@ const GlRoot = ({ children }) => {
       >
         <GlCamera />
         <glTunnel.Out />
+
+        <PostProcessing
+          passes={passes}
+          effectComposerProps={effectComposerProps}
+        />
       </Canvas>
 
       {children}

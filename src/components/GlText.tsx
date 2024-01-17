@@ -9,6 +9,17 @@ const GlText = ({ children, font }) => {
   const ref = useRef<Text>(null)
   const text = children?.ref?.current
 
+  // const shaderProps = useMemo(
+  //   () => ({
+  //     uniforms: {
+  //       uColor: { value: new Color('pink') },
+  //     },
+  //     vertexShader,
+  //     fragmentShader,
+  //   }),
+  //   []
+  // )
+
   const [style, setStyle] = useState({})
 
   useSyncDomGl(ref.current, text)
@@ -40,14 +51,14 @@ const GlText = ({ children, font }) => {
         <Text
           ref={ref}
           {...style}
-          // TODO: Anchor offset is dependent on aspect ratio and probably font family as well
-          // SO this might need to be adjustable per font
+          // TODO: this might need to be adjustable per font
           anchorX={0.5}
           anchorY={-0.485}
           overflowWrap="break-word"
           font={font}
         >
           {text?.innerText}
+          {/* <shaderMaterial {...shaderProps} /> */}
         </Text>
       </GlElement>
 

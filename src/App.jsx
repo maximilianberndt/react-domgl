@@ -1,7 +1,8 @@
-import { MeshTransmissionMaterial, Sphere } from '@react-three/drei'
+import { Box, MeshTransmissionMaterial } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
+import { Noise } from '@react-three/postprocessing'
 import { useLenis } from '@studio-freight/react-lenis'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Vector2 } from 'three'
 import GlElement from './components/GlElement'
 import GlImage from './components/GlImage'
@@ -26,7 +27,7 @@ const Object = () => {
     ref.current.rotation.x += 0.01
     ref.current.rotation.y += 0.01
 
-    pointerCurrent.current.lerp(pointer.current, 0.02)
+    pointerCurrent.current.lerp(pointer.current, 0.03)
 
     ref.current.position.x =
       (pointerCurrent.current.x - window.innerWidth * 0.5) *
@@ -53,7 +54,7 @@ const Object = () => {
   }, [])
 
   return (
-    <Sphere ref={ref}>
+    <Box ref={ref}>
       <MeshTransmissionMaterial
         ior={1.14}
         thickness={1.4}
@@ -63,7 +64,7 @@ const Object = () => {
         distortionScale={1.4}
         temporalDistortion={0.14}
       />
-    </Sphere>
+    </Box>
   )
 }
 
@@ -72,8 +73,10 @@ function App() {
   const videoRef = useRef()
   const textRef = useRef()
 
+  const passes = useMemo(() => [<Noise key={0} opacity={0.4} />], [])
+
   return (
-    <GlRoot>
+    <GlRoot passes={passes} effectComposerProps={{ enabled: true }}>
       <div style={{ height: '200vh', fontSize: '100px' }}>
         <GlElement>
           <Object />
@@ -94,6 +97,8 @@ function App() {
 
         <GlVideo>
           <video
+            playsInline
+            muted
             ref={videoRef}
             src="/test.mp4"
             style={{ width: '40vw', aspectRatio: '16 / 9' }}

@@ -4,13 +4,13 @@ Easily recreate the dom in webgl
 
 ## Demo
 
-(https://mbe-domgl.netlify.app/)[https://mbe-domgl.netlify.app/]
+https://mbe-domgl.netlify.app/
 
 ## Based on
 
 - Lenis by studio freight
 - react-three-fiber
-- Three.js
+- Postprocessing with @react-three/postprocessing
 
 ## Status
 
@@ -18,7 +18,7 @@ Easily recreate the dom in webgl
 - [x] Image
 - [x] Video
 - [x] Text
+- [x] Post Processing
+- [ ] Loading Progress
 - [ ] Images
 - [ ] 3D models
-- [ ] Post Processing
-- [ ] Loading Progress

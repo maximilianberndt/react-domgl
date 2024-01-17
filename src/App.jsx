@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { Vector2 } from 'three'
 import GlElement from './components/GlElement'
 import GlImage from './components/GlImage'
-import GlRoot from './components/GlRoot'
+import GlRoot, { glStore } from './components/GlRoot'
 import GlText from './components/GlText'
 import GlVideo from './components/GlVideo'
 import useSceneSize from './hooks/useSceneSize'
@@ -68,6 +68,30 @@ const Object = () => {
   )
 }
 
+const Loader = () => {
+  const progress = glStore((s) => s.loadingProgress)
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: 'black',
+        color: 'white',
+        visibility: progress === 1 ? 'hidden' : 'visible',
+      }}
+    >
+      {progress * 100}
+    </div>
+  )
+}
+
 function App() {
   const imageRef = useRef()
   const videoRef = useRef()
@@ -76,50 +100,53 @@ function App() {
   const passes = useMemo(() => [<Noise key={0} opacity={0.4} />], [])
 
   return (
-    <GlRoot passes={passes} effectComposerProps={{ enabled: true }}>
-      <div style={{ height: '200vh', fontSize: '100px' }}>
-        <GlElement>
-          <Object />
-        </GlElement>
+    <>
+      <GlRoot passes={passes} effectComposerProps={{ enabled: true }}>
+        <div style={{ height: '200vh', fontSize: '100px' }}>
+          <GlElement>
+            <Object />
+          </GlElement>
 
-        <GlImage>
-          <img
-            ref={imageRef}
-            src="/test.png"
-            style={{
-              width: '30vw',
-              marginTop: '10%',
-              marginLeft: '10%',
-              aspectRatio: '1 / 1',
-            }}
-          />
-        </GlImage>
+          <GlImage>
+            <img
+              ref={imageRef}
+              src="/test.png"
+              style={{
+                width: '30vw',
+                marginTop: '10%',
+                marginLeft: '10%',
+                aspectRatio: '1 / 1',
+              }}
+            />
+          </GlImage>
 
-        <GlVideo>
-          <video
-            playsInline
-            muted
-            ref={videoRef}
-            src="/test.mp4"
-            style={{ width: '40vw', aspectRatio: '16 / 9' }}
-          />
-        </GlVideo>
+          <GlVideo>
+            <video
+              playsInline
+              muted
+              ref={videoRef}
+              src="/test.mp4"
+              style={{ width: '40vw', aspectRatio: '16 / 9' }}
+            />
+          </GlVideo>
 
-        <GlText font={'/Inter-Medium.ttf'}>
-          <h1
-            ref={textRef}
-            style={{
-              fontSize: '20vw',
-              position: 'absolute',
-              top: '300px',
-              left: '200px',
-            }}
-          >
-            Test Test Test
-          </h1>
-        </GlText>
-      </div>
-    </GlRoot>
+          <GlText font={'/Inter-Medium.ttf'}>
+            <h1
+              ref={textRef}
+              style={{
+                fontSize: '20vw',
+                position: 'absolute',
+                top: '300px',
+                left: '200px',
+              }}
+            >
+              Test Test Test
+            </h1>
+          </GlText>
+        </div>
+      </GlRoot>
+      <Loader />
+    </>
   )
 }
 

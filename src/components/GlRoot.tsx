@@ -1,18 +1,20 @@
 import { Canvas } from '@react-three/fiber'
 import { ReactLenis } from '@studio-freight/react-lenis'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { LoadingManager } from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import tunnel from 'tunnel-rat'
 import { create } from 'zustand'
 import GlCamera from './GlCamera'
 import PostProcessing, { PostProcessingProps } from './PostProcessing'
 
-export const textureLoader = new TextureLoader()
-
+export const loadingManager = new LoadingManager()
+export const textureLoader = new TextureLoader(loadingManager)
 export const glTunnel = tunnel()
 
 export const glStore = create(() => ({
   camera: null,
+  loadingProgress: 0,
 }))
 
 interface GlRootProps extends PostProcessingProps {
@@ -24,6 +26,15 @@ const GlRoot = ({
   passes = [],
   effectComposerProps,
 }: GlRootProps) => {
+  useEffect(() => {
+    loadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
+      glStore.setState({ loadingProgress: itemsLoaded / itemsTotal })
+    }
+    loadingManager.onLoad = () => {
+      glStore.setState({ loadingProgress: 1 })
+    }
+  }, [])
+
   return (
     <ReactLenis
       root

@@ -1,20 +1,33 @@
 import { Stats } from '@react-three/drei'
 import { Noise } from '@react-three/postprocessing'
-import React, { useMemo } from 'react'
+import { useControls } from 'leva'
+import React, { useRef } from 'react'
 import GlElement from '../components/GlElement'
 import GlRoot from '../components/GlRoot'
 import Image from './Image'
 import Loader from './Loader'
 import Object from './Object'
+import Pass from './Pass'
 import Text from './Text'
 import Video from './Video'
 
 const Demo = () => {
-  const passes = useMemo(() => [<Noise key={0} opacity={0.4} />], [])
+  const passRef = useRef()
+
+  const postPassProps = useControls('Post Pass', {
+    frequency: { value: 2, min: 1, max: 20 },
+    amplitude: { value: 0.1, min: 0, max: 1 },
+  })
 
   return (
     <>
-      <GlRoot passes={passes} effectComposerProps={{ enabled: true }}>
+      <GlRoot
+        passes={[
+          <Noise key={0} opacity={0.4} />,
+          <Pass ref={passRef} {...postPassProps} />,
+        ]}
+        effectComposerProps={{ enabled: true }}
+      >
         <Stats />
 
         <GlElement>

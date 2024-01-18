@@ -1,11 +1,20 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import { Mesh, VideoTexture } from 'three'
+import React, { ReactNode, useEffect, useMemo, useRef } from 'react'
+import { BufferGeometry, Mesh, VideoTexture } from 'three'
 import fragmentShader from '../glsl/base/frag.glsl'
 import vertexShader from '../glsl/base/vert.glsl'
 import useSyncDomGl from '../hooks/useSyncDomGl'
 import GlElement from './GlElement'
+import { plane } from './GlRoot'
 
-const GlVideo = ({ children }) => {
+const GlVideo = ({
+  children,
+  onClick,
+  geometry,
+}: {
+  children: ReactNode
+  geometry?: BufferGeometry
+  onClick?: (e: any) => void
+}) => {
   const ref = useRef<Mesh>(null)
   const video = children?.ref?.current
 
@@ -29,13 +38,9 @@ const GlVideo = ({ children }) => {
       <GlElement>
         <mesh
           ref={ref}
-          onClick={() => {
-            if (!video) return
-            video.paused ? video.play() : video.pause()
-          }}
+          onClick={onClick}
+          geometry={geometry || plane}
         >
-          {/* TODO: Make target geometry optional */}
-          <planeGeometry args={[1, 1, 1]} />
           <shaderMaterial
             uniforms={uniforms}
             fragmentShader={fragmentShader}

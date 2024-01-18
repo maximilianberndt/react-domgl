@@ -19,6 +19,5 @@ https://mbe-domgl.netlify.app/
 - [x] Video
 - [x] Text
 - [x] Post Processing
-- [ ] Loading Progress
-- [ ] Images
+- [x] Loading Progress
 - [ ] 3D models

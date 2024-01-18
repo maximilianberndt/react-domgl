@@ -1,7 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { ReactLenis } from '@studio-freight/react-lenis'
 import React, { useEffect } from 'react'
-import { LoadingManager } from 'three'
+import { LoadingManager, PlaneGeometry } from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import tunnel from 'tunnel-rat'
 import { create } from 'zustand'
@@ -10,6 +10,7 @@ import PostProcessing, { PostProcessingProps } from './PostProcessing'
 
 export const loadingManager = new LoadingManager()
 export const textureLoader = new TextureLoader(loadingManager)
+export const plane = new PlaneGeometry()
 export const glTunnel = tunnel()
 
 export const glStore = create(() => ({

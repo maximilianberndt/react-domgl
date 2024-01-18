@@ -1,12 +1,18 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import { Mesh } from 'three'
+import React, { ReactNode, useEffect, useMemo, useRef } from 'react'
+import { BufferGeometry, Mesh } from 'three'
 import fragmentShader from '../glsl/base/frag.glsl'
 import vertexShader from '../glsl/base/vert.glsl'
 import useSyncDomGl from '../hooks/useSyncDomGl'
 import GlElement from './GlElement'
-import { textureLoader } from './GlRoot'
+import { plane, textureLoader } from './GlRoot'
 
-const GlImage = ({ children }) => {
+const GlImage = ({
+  children,
+  geometry,
+}: {
+  children: ReactNode
+  geometry?: BufferGeometry
+}) => {
   const ref = useRef<Mesh>(null)
   const image = children?.ref?.current
 
@@ -33,9 +39,8 @@ const GlImage = ({ children }) => {
   return (
     <>
       <GlElement>
-        <mesh ref={ref}>
+        <mesh ref={ref} geometry={geometry || plane}>
           {/* TODO: Make target geometry optional */}
-          <planeGeometry args={[1, 1, 1]} />
           <shaderMaterial
             uniforms={uniforms}
             fragmentShader={fragmentShader}

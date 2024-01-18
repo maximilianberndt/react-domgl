@@ -7,7 +7,7 @@ import React from 'react'
 
 export interface PostProcessingProps {
   passes: Effect[]
-  effectComposerProps: EffectComposerProps
+  effectComposerProps: Omit<EffectComposerProps, 'children'>
 }
 
 const PostProcessing = ({

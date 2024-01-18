@@ -1,0 +1,65 @@
+import { Box, MeshTransmissionMaterial } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
+import { useLenis } from '@studio-freight/react-lenis'
+import React, { useEffect, useRef } from 'react'
+import { Mesh, Vector2 } from 'three'
+import useSceneSize from '../hooks/useSceneSize'
+
+const Object = () => {
+  const ref = useRef<Mesh>(null)
+  const scrollY = useRef(0)
+  const pointer = useRef(new Vector2())
+  const pointerCurrent = useRef(new Vector2())
+  const { scaleFactor } = useSceneSize()
+
+  useLenis(({ scroll }) => {
+    scrollY.current = scroll
+  })
+
+  useFrame(() => {
+    if (!ref.current) return
+    ref.current.rotation.x += 0.01
+    ref.current.rotation.y += 0.01
+
+    pointerCurrent.current.lerp(pointer.current, 0.03)
+
+    ref.current.position.x =
+      (pointerCurrent.current.x - window.innerWidth * 0.5) *
+      0.5 *
+      scaleFactor.x
+    ref.current.position.y =
+      -scrollY.current * scaleFactor.y +
+      (-pointerCurrent.current.y + window.innerHeight * 0.5) *
+        0.5 *
+        scaleFactor.y
+    ref.current.position.z = 1.5
+  })
+
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      pointer.current.set(e.clientX, e.clientY)
+    }
+
+    document.body.addEventListener('mousemove', onMouseMove)
+
+    return () => {
+      document.body.removeEventListener('mousemove', onMouseMove)
+    }
+  }, [])
+
+  return (
+    <Box ref={ref}>
+      <MeshTransmissionMaterial
+        ior={1.14}
+        thickness={1.4}
+        anisotropy={0.14}
+        chromaticAberration={0.14}
+        distortion={0.14}
+        distortionScale={1.4}
+        temporalDistortion={0.14}
+      />
+    </Box>
+  )
+}
+
+export default Object

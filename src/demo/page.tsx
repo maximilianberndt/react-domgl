@@ -1,5 +1,6 @@
 import { Stats } from '@react-three/drei'
 import { Noise } from '@react-three/postprocessing'
+import { useLenis } from '@studio-freight/react-lenis'
 import { useControls } from 'leva'
 import React, { useRef } from 'react'
 import GlElement from '../components/GlElement'
@@ -16,7 +17,14 @@ const Demo = () => {
 
   const postPassProps = useControls('Post Pass', {
     frequency: { value: 2, min: 1, max: 20 },
-    amplitude: { value: 0.1, min: 0, max: 1 },
+    amplitude: { value: 0, min: 0, max: 1 },
+  })
+
+  useLenis((p) => {
+    if (!passRef.current) return
+    passRef.current.uniforms.get('amplitude').value =
+      p.velocity * 0.01
+    // console.log(p.velocity, )
   })
 
   return (
@@ -24,7 +32,7 @@ const Demo = () => {
       <GlRoot
         passes={[
           <Noise key={0} opacity={0.4} />,
-          <Pass ref={passRef} {...postPassProps} />,
+          <Pass key={1} ref={passRef} {...postPassProps} />,
         ]}
         effectComposerProps={{ enabled: true }}
       >

@@ -36,9 +36,9 @@ class PassEffect extends Effect {
     })
   }
 
-  update(renderer, inputBuffer, deltaTime) {
-    this.uniforms.get('time')!.value += deltaTime
-  }
+  //   update(renderer, inputBuffer, deltaTime) {
+  //     this.uniforms.get('time')!.value += deltaTime
+  //   }
 }
 
 export default forwardRef(function Pass(props, ref) {

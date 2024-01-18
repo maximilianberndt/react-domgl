@@ -16,14 +16,14 @@ const Demo = () => {
   const passRef = useRef()
 
   const postPassProps = useControls('Post Pass', {
-    frequency: { value: 2, min: 1, max: 20 },
+    frequency: { value: Math.PI, min: 1, max: 20 },
     amplitude: { value: 0, min: 0, max: 1 },
   })
 
   useLenis((p) => {
     if (!passRef.current) return
     passRef.current.uniforms.get('amplitude').value =
-      p.velocity * 0.01
+      p.velocity * 0.005
     // console.log(p.velocity, )
   })
 

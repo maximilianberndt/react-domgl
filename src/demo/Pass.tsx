@@ -11,7 +11,8 @@ const fragmentShader = /* glsl */ `
     
     void mainUv(inout vec2 uv)
     {
-        uv.y += sin(uv.x * frequency + time) * amplitude;
+        // uv *= 1. - abs(amplitude * .5);
+        uv.y += sin(uv.x * frequency) * amplitude;
     }
 
     void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)

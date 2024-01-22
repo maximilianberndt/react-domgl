@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import GlVideo from '../components/GlVideo'
 
-const Video = ({ src }) => {
+const Video = ({ src, style }) => {
   const ref = useRef<HTMLVideoElement>(null)
 
   const onClick = () => {
@@ -18,7 +18,7 @@ const Video = ({ src }) => {
         muted
         ref={ref}
         src={src}
-        style={{ width: '40vw', aspectRatio: '16 / 9' }}
+        style={style}
         onClick={onClick}
       />
     </GlVideo>

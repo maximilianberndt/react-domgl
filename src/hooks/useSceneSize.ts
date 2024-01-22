@@ -3,10 +3,11 @@ import { useWindowSize } from 'usehooks-ts'
 import { glStore } from '../components/GlRoot'
 
 export type ScaleFactor = { x: number; y: number }
+export type Size = { width: number; height: number }
 
 const useSceneSize = (): {
-  sceneSize: { width: number; height: number }
-  windowSize: { width: number; height: number }
+  sceneSize: Size
+  windowSize: Size
   scaleFactor: ScaleFactor
 } => {
   const camera = glStore((s) => s.camera)

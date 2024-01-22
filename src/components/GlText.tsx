@@ -30,6 +30,8 @@ const GlText = ({ children, font }) => {
 
     const fontSize = parseFloat(s.fontSize)
 
+    console.log(s.lineHeight)
+
     setStyle({
       fontSize: fontSize * scaleFactor.x,
       maxWidth: parseFloat(s.width) * scaleFactor.x,

@@ -1,14 +1,14 @@
 import { useLenis } from '@studio-freight/react-lenis'
 import { useEffect } from 'react'
 import { Mesh } from 'three'
-import useSceneSize, { ScaleFactor } from './useSceneSize'
+import useSceneSize, { ScaleFactor, Size } from './useSceneSize'
 
 const updateX = (
   plane: Mesh,
   offset = 0,
   bounds: DOMRect,
   scaleFactor: ScaleFactor,
-  sceneSize
+  sceneSize: Size
 ) => {
   const x = bounds.left - offset
   const sceneOffset = -sceneSize.width * 0.5 + plane.scale.x * 0.5
@@ -21,7 +21,7 @@ const updateY = (
   offset = 0,
   bounds: DOMRect,
   scaleFactor: ScaleFactor,
-  sceneSize
+  sceneSize: Size
 ) => {
   const y = bounds.top - offset
   const sceneOffset = sceneSize.height * 0.5 - plane.scale.y * 0.5
@@ -45,13 +45,13 @@ type SyncOptions = {
 }
 
 const useSyncDomGl = (
-  glElement: Mesh,
+  glElement: Mesh | null,
   domElement: HTMLElement,
   {
     syncScale = false,
     offsetX = { current: 0 },
     offsetY = { current: 0 },
-  }: SyncOptions = {}
+  }: Partial<SyncOptions> = {}
 ) => {
   const { scaleFactor, sceneSize } = useSceneSize()
   const lenis = useLenis()

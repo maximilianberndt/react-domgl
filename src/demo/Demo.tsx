@@ -11,6 +11,7 @@ import Object from './Object'
 import Pass from './Pass'
 import Text from './Text'
 import Video from './Video'
+import s from './demo.module.scss'
 
 const Demo = () => {
   const passRef = useRef()
@@ -50,20 +51,37 @@ const Demo = () => {
           <Object />
         </GlElement>
 
-        <Image src={'/test.png'} />
+        <div className={s.grid}>
+          <Text
+            style={{
+              fontSize: '10vw',
+            }}
+          >
+            DomGL
+          </Text>
+          <Text
+            style={{
+              fontSize: '5vw',
+            }}
+          >
+            What is this?
+          </Text>
 
-        <Video src={'/test.mp4'} />
+          <Image
+            src={'/test.png'}
+            style={{
+              width: '30vw',
+              marginTop: '10%',
+              marginLeft: '10%',
+              aspectRatio: '1 / 1',
+            }}
+          />
 
-        <Text
-          style={{
-            fontSize: '20vw',
-            position: 'absolute',
-            top: '300px',
-            left: '200px',
-          }}
-        >
-          Helo Helo Helo
-        </Text>
+          <Video
+            src={'/test.mp4'}
+            style={{ width: '40vw', aspectRatio: '16 / 9' }}
+          />
+        </div>
       </GlRoot>
 
       <Loader />

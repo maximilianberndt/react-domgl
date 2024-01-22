@@ -1,6 +1,7 @@
 import { useLenis } from '@studio-freight/react-lenis'
-import { useEffect } from 'react'
+import { useRef } from 'react'
 import { Mesh } from 'three'
+// import useResizeObserver from 'use-resize-observer'
 import useSceneSize, { ScaleFactor, Size } from './useSceneSize'
 
 const updateX = (
@@ -38,6 +39,49 @@ const updateScale = (
   plane.scale.y = bounds.height * scaleFactor.y
 }
 
+const resize = (
+  mesh: Mesh,
+  domElement,
+  { offsetX, offsetY, scaleFactor, sceneSize, lenis, syncScale }
+) => {
+  if (!domElement || !mesh) return
+  console.log('syncing')
+
+  const isPlane = { IMG: true, VIDEO: true }[domElement.nodeName]
+
+  if (isPlane) {
+    domElement.style.visibility = 'hidden'
+  } else {
+    // isText
+    domElement.style.color = 'transparent'
+  }
+  const bounds = domElement.getBoundingClientRect()
+
+  // TODO: The scrollbar is fucking up the size calculation
+  // So the webgl element is slightly smaller
+  syncScale && updateScale(mesh, bounds, scaleFactor)
+  updateX(mesh, offsetX.current, bounds, scaleFactor, sceneSize)
+  updateY(
+    mesh,
+    -lenis.scroll + offsetY.current,
+    bounds,
+    scaleFactor,
+    sceneSize
+  )
+
+  // Update uniforms automatically
+  if (
+    mesh.material.uniforms.uPlaneSizes &&
+    mesh.material.uniforms.uImageSizes
+  ) {
+    mesh.material.uniforms.uPlaneSizes.value = mesh.scale
+    mesh.material.uniforms.uImageSizes.value = [
+      bounds.width,
+      bounds.height,
+    ]
+  }
+}
+
 type SyncOptions = {
   syncScale?: boolean
   offsetX: { current: number }
@@ -45,7 +89,6 @@ type SyncOptions = {
 }
 
 const useSyncDomGl = (
-  glElement: Mesh | null,
   domElement: HTMLElement,
   {
     syncScale = false,
@@ -53,51 +96,33 @@ const useSyncDomGl = (
     offsetY = { current: 0 },
   }: Partial<SyncOptions> = {}
 ) => {
+  const glElement = useRef<Mesh>(null)
   const { scaleFactor, sceneSize } = useSceneSize()
   const lenis = useLenis()
 
-  useEffect(() => {
-    if (!domElement || !glElement) return
-    const isPlane = { IMG: true, VIDEO: true }[domElement.nodeName]
+  // TODO: debounce sync
+  const sync = (mesh: Mesh) => {
+    if (!mesh) return
+    glElement.current = mesh
 
-    if (isPlane) {
-      domElement.style.visibility = 'hidden'
-    } else {
-      // isText
-      domElement.style.color = 'transparent'
-    }
-    const bounds = domElement.getBoundingClientRect()
-
-    // TODO: The scrollbar is fucking up the size calculation
-    // So the webgl element is slightly smaller
-    syncScale && updateScale(glElement, bounds, scaleFactor)
-    updateX(
-      glElement,
-      offsetX.current,
-      bounds,
+    resize(mesh, domElement, {
+      offsetX,
+      offsetY,
       scaleFactor,
-      sceneSize
-    )
-    updateY(
-      glElement,
-      -lenis.scroll + offsetY.current,
-      bounds,
-      scaleFactor,
-      sceneSize
-    )
+      sceneSize,
+      lenis,
+      syncScale,
+    })
+  }
 
-    // Update uniforms automatically
-    if (
-      glElement.material.uniforms.uPlaneSizes &&
-      glElement.material.uniforms.uImageSizes
-    ) {
-      glElement.material.uniforms.uPlaneSizes.value = glElement.scale
-      glElement.material.uniforms.uImageSizes.value = [
-        bounds.width,
-        bounds.height,
-      ]
-    }
-  }, [glElement, domElement, scaleFactor.x, scaleFactor.y])
+  // TODO: Do we need resize observer?
+  // const { ref } = useResizeObserver<HTMLElement>({ onResize: resize })
+
+  // useEffect(() => {
+  //   ref(domElement)
+  // }, [domElement])
+
+  return sync
 }
 
 export default useSyncDomGl

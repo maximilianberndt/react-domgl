@@ -1,12 +1,11 @@
 import { Text } from '@react-three/drei'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useSceneSize from '../hooks/useSceneSize'
 import useSyncDomGl from '../hooks/useSyncDomGl'
 import GlElement from './GlElement'
 
 const GlText = ({ children, font }) => {
   const { scaleFactor } = useSceneSize()
-  const ref = useRef<Text>(null)
   const text = children?.ref?.current
 
   // const shaderProps = useMemo(
@@ -22,15 +21,13 @@ const GlText = ({ children, font }) => {
 
   const [style, setStyle] = useState({})
 
-  useSyncDomGl(ref.current, text)
+  const sync = useSyncDomGl(text)
 
   useEffect(() => {
     if (!text) return
     const s = getComputedStyle(text)
 
     const fontSize = parseFloat(s.fontSize)
-
-    console.log(s.lineHeight)
 
     setStyle({
       fontSize: fontSize * scaleFactor.x,
@@ -51,7 +48,7 @@ const GlText = ({ children, font }) => {
     <>
       <GlElement>
         <Text
-          ref={ref}
+          ref={sync}
           {...style}
           // TODO: this might need to be adjustable per font
           anchorX={0.5}

@@ -1,5 +1,5 @@
-import React, { ReactNode, useEffect, useMemo, useRef } from 'react'
-import { BufferGeometry, Mesh, VideoTexture } from 'three'
+import React, { ReactNode, useEffect, useMemo } from 'react'
+import { BufferGeometry, VideoTexture } from 'three'
 import fragmentShader from '../glsl/base/frag.glsl'
 import vertexShader from '../glsl/base/vert.glsl'
 import useSyncDomGl from '../hooks/useSyncDomGl'
@@ -15,8 +15,7 @@ const GlVideo = ({
   geometry?: BufferGeometry
   onClick?: (e: any) => void
 }) => {
-  const ref = useRef<Mesh>(null)
-  const video = children?.ref?.current
+  const video = useMemo(() => children?.ref?.current, [children])
 
   const uniforms = useMemo(
     () => ({
@@ -27,7 +26,7 @@ const GlVideo = ({
     []
   )
 
-  useSyncDomGl(ref.current, video, { syncScale: true })
+  const sync = useSyncDomGl(video, { syncScale: true })
 
   useEffect(() => {
     if (video) uniforms.tMap.value = new VideoTexture(video)
@@ -37,7 +36,7 @@ const GlVideo = ({
     <>
       <GlElement>
         <mesh
-          ref={ref}
+          ref={sync}
           onClick={onClick}
           geometry={geometry || plane}
         >

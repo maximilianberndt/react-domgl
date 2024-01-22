@@ -1,10 +1,10 @@
 import { Stats } from '@react-three/drei'
-import { Noise } from '@react-three/postprocessing'
 import { useLenis } from '@studio-freight/react-lenis'
 import { useControls } from 'leva'
 import React, { useRef } from 'react'
 import GlElement from '../components/GlElement'
 import GlRoot from '../components/GlRoot'
+import Background from './Background'
 import Image from './Image'
 import Loader from './Loader'
 import Object from './Object'
@@ -18,25 +18,33 @@ const Demo = () => {
   const postPassProps = useControls('Post Pass', {
     frequency: { value: Math.PI, min: 1, max: 20 },
     amplitude: { value: 0, min: 0, max: 1 },
+    blocksStrength: { value: 1 },
+    rotation: { value: 0, min: -20, max: 0 },
   })
 
-  useLenis((p) => {
+  useLenis(({ velocity }) => {
     if (!passRef.current) return
     passRef.current.uniforms.get('amplitude').value =
-      p.velocity * 0.005
-    // console.log(p.velocity, )
+      velocity * -0.005
+
+    // passRef.current.uniforms.get('blocksStrength').value = Math.abs(
+    //   window.innerHeight - velocity * 1000
+    // )
+
+    // console.log(passRef.current.uniforms.get('blocksStrength').value)
   })
 
   return (
     <>
       <GlRoot
-        passes={[
-          <Noise key={0} opacity={0.4} />,
-          <Pass key={1} ref={passRef} {...postPassProps} />,
-        ]}
+        passes={[<Pass key={1} ref={passRef} {...postPassProps} />]}
         effectComposerProps={{ enabled: true }}
       >
         <Stats />
+
+        <GlElement>
+          <Background />
+        </GlElement>
 
         <GlElement>
           <Object />
@@ -46,7 +54,16 @@ const Demo = () => {
 
         <Video src={'/test.mp4'} />
 
-        <Text>Helo Helo Helo</Text>
+        <Text
+          style={{
+            fontSize: '20vw',
+            position: 'absolute',
+            top: '300px',
+            left: '200px',
+          }}
+        >
+          Helo Helo Helo
+        </Text>
       </GlRoot>
 
       <Loader />

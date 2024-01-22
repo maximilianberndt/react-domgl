@@ -1,4 +1,4 @@
-import Demo from './demo/page'
+import Demo from './demo/Demo'
 
 const App = () => {
   return <Demo />

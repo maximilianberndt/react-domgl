@@ -16,12 +16,17 @@ const Object = () => {
     scrollY.current = scroll
   })
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (!ref.current) return
     ref.current.rotation.x += 0.01
     ref.current.rotation.y += 0.01
 
-    pointerCurrent.current.lerp(pointer.current, 0.03)
+    // console.log((0.016 / delta) * 0.04)
+
+    pointerCurrent.current.lerp(
+      pointer.current,
+      (0.016 / delta) * 0.02
+    )
 
     ref.current.position.x =
       (pointerCurrent.current.x - window.innerWidth * 0.5) *

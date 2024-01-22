@@ -41,12 +41,10 @@ const updateScale = (
 
 const resize = (
   mesh: Mesh,
-  domElement,
+  domElement: HTMLElement,
   { offsetX, offsetY, scaleFactor, sceneSize, lenis, syncScale }
 ) => {
   if (!domElement || !mesh) return
-  console.log('syncing')
-
   const isPlane = { IMG: true, VIDEO: true }[domElement.nodeName]
 
   if (isPlane) {

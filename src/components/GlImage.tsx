@@ -9,9 +9,11 @@ import { plane, textureLoader } from './GlRoot'
 const GlImage = ({
   children,
   geometry,
+  ...rest
 }: {
   children: ReactNode
   geometry?: BufferGeometry
+  [x: string]: any
 }) => {
   const image = useMemo(() => children?.ref?.current, [children])
 
@@ -38,7 +40,7 @@ const GlImage = ({
   return (
     <>
       <GlElement>
-        <mesh ref={sync} geometry={geometry || plane}>
+        <mesh ref={sync} geometry={geometry || plane} {...rest}>
           {/* TODO: Make target geometry optional */}
           <shaderMaterial
             uniforms={uniforms}

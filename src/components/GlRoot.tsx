@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber'
 import { ReactLenis } from '@studio-freight/react-lenis'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Camera, LoadingManager, PlaneGeometry } from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import tunnel from 'tunnel-rat'
@@ -32,6 +32,8 @@ const GlRoot = ({
   passes = [],
   effectComposerProps,
 }: GlRootProps) => {
+  const eventSource = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     loadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
       glStore.setState({ loadingProgress: itemsLoaded / itemsTotal })
@@ -42,41 +44,45 @@ const GlRoot = ({
   }, [])
 
   return (
-    <ReactLenis
-      root
-      options={{
-        // gestureOrientation: 'both',
-        smoothWheel: true,
-        smoothTouch: true,
-        wheelEventsTarget: document.body,
-        syncTouch: true,
-      }}
-    >
-      <Canvas
-        flat
-        linear
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '100vh',
-          width: '100vw',
-          zIndex: -1,
+    <div ref={eventSource}>
+      <ReactLenis
+        root
+        options={{
+          // gestureOrientation: 'both',
+          smoothWheel: true,
+          smoothTouch: true,
+          wheelEventsTarget: document.body,
+          syncTouch: true,
         }}
-        // camera={{manual: true}}
       >
-        <GlCamera />
-        <glTunnel.Out />
+        <Canvas
+          flat
+          linear
+          eventSource={eventSource}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '100vh',
+            width: '100vw',
+            zIndex: -1,
+            pointerEvents: 'none',
+          }}
+          // camera={{manual: true}}
+        >
+          <GlCamera />
+          <glTunnel.Out />
 
-        <PostProcessing
-          passes={passes}
-          effectComposerProps={effectComposerProps}
-        />
-      </Canvas>
+          <PostProcessing
+            passes={passes}
+            effectComposerProps={effectComposerProps}
+          />
+        </Canvas>
 
-      {children}
-    </ReactLenis>
+        {children}
+      </ReactLenis>
+    </div>
   )
 }
 

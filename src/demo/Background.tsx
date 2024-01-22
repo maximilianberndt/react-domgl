@@ -43,7 +43,7 @@ void main() {
     mixer
   );
 
-  float uGrain = 0.08;
+  float uGrain = 0.09;
   float grain = mix(-uGrain, uGrain, random(sin(vUv) * uTime));
 	color.rgb += grain;
 

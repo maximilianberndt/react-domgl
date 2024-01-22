@@ -7,6 +7,7 @@
 
 .headline {
   font-size: 10vw;
+  text-transform: uppercase;
 }
 
 .copy {
@@ -21,4 +22,17 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 3vw;
+}
+
+.button {
+  margin-top: 5vw;
+  border-radius: 999px;
+  padding: 20px;
+  border: 1px solid black;
+  width: 100%;
+}
+
+.footer {
+  width: 100%;
+  margin-top: 10vw;
 }

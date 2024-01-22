@@ -25,7 +25,7 @@ const Demo = () => {
     rotation: { value: 0, min: -20, max: 0 },
   })
 
-  useLenis(({ velocity }) => {
+  const lenis = useLenis(({ velocity }) => {
     currentVelocity.current = lerp(
       currentVelocity.current,
       velocity,
@@ -85,14 +85,13 @@ const Demo = () => {
             What is this?
           </Text>
           <Text className={s.copy}>
-            I like to call this technique DomGl because it allows you
-            to mix WebGl with regular dom elements. We can copy the
-            position and size of images, videos and text and create
-            WebGL elements that perfectly reflect them. This allows to
-            add fancy effects to any element. Notice the fancy fadeIn
-            animation, how the text is reflected in the cube and how
-            the site bends during scroll. All of this would not be
-            possible without WebGL.
+            I call this technique DomGl because it allows you to mix
+            WebGl with regular dom elements. We can copy the position
+            and size of elements and perfectly copy them to the WebGL
+            world. This allows to add fancy effects to any element.
+            Notice the fancy fade in animation, how the text is
+            reflected in the cube and how the site bends during
+            scroll. All of this would not be possible without WebGL.
           </Text>
 
           <div className={s.imageGrid}>
@@ -112,13 +111,7 @@ const Demo = () => {
             />
           </div>
 
-          <Text className={s.copy}>
-            The good thing is that we can apply this effect to only
-            the elements that we want. For example This button is just
-            html + css.
-          </Text>
-
-          <Text className={s.copy}>
+          {/* <Text className={s.copy}>
             I just have limited time creating this but this allows us
             to build stuff like:
           </Text>
@@ -141,7 +134,30 @@ const Demo = () => {
             >
               {copy}
             </Text>
-          ))}
+          ))} */}
+
+          <div className={s.footer}>
+            <Text className={s.copy}>
+              The good thing is that we can apply this effect to only
+              the elements that we want. For example This button is
+              just html + css.
+            </Text>
+
+            <button
+              className={s.button}
+              onClick={() =>
+                lenis.scrollTo(0, {
+                  duration: 2,
+                  easing: (x) =>
+                    x < 0.5
+                      ? 8 * x * x * x * x
+                      : 1 - Math.pow(-2 * x + 2, 4) / 2,
+                })
+              }
+            >
+              <span className={s.headline}>Scroll to top</span>
+            </button>
+          </div>
         </div>
       </GlRoot>
 

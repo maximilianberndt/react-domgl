@@ -9,6 +9,12 @@
   padding: 0;
   box-sizing: border-box;
   font-family: Inter, sans-serif;
+  border: 0;
+  background: transparent;
+}
+
+button {
+  cursor: pointer;
 }
 
 :root {

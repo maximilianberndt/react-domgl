@@ -140,7 +140,9 @@ const Demo = () => {
             <Text className={s.copy}>
               The good thing is that we can apply this effect to only
               the elements that we want. For example This button is
-              just html + css.
+              just html + css. But we could aslo recreate it in WebGl
+              and then it could have the same animation as the iamges.
+              Or a different one. The possibilities are endless.
             </Text>
 
             <button

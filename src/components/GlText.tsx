@@ -28,12 +28,13 @@ const GlText = ({ children, font }) => {
     const s = getComputedStyle(text)
 
     const fontSize = parseFloat(s.fontSize)
+    const lineHeight =
+      s.lineHeight === 'normal' ? 1.2 : parseFloat(s.lineHeight)
 
     setStyle({
       fontSize: fontSize * scaleFactor.x,
       maxWidth: parseFloat(s.width) * scaleFactor.x,
-      lineHeight:
-        s.lineHeight === 'normal' ? 1.2 : parseFloat(s.lineHeight),
+      lineHeight: lineHeight < 2 ? lineHeight : lineHeight / fontSize,
       fontWeight:
         { normal: 'nomal', bold: 'bold' }[s.fontWeight] ||
         parseFloat(s.fontWeight),

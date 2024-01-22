@@ -34,7 +34,7 @@ const Demo = () => {
 
     if (!passRef.current) return
     const v = currentVelocity.current
-    passRef.current.uniforms.get('amplitude').value = v * -0.005
+    passRef.current.uniforms.get('amplitude').value = v * -0.006
 
     // passRef.current.uniforms.get('blocksStrength').value = Math.abs(
     //   window.innerHeight - velocity * 1000
@@ -61,43 +61,87 @@ const Demo = () => {
 
         <div className={s.grid}>
           <Text
+            className={s.copy}
             style={{
-              fontSize: '10vw',
+              position: 'absolute',
+              top: '17vw',
+              right: '10vw',
+              whiteSpace: 'nowrap',
             }}
           >
-            DomGl
+            Just scroll and you will see
+          </Text>
+
+          <Text className={s.headline} as="h1">
+            Hello -
           </Text>
           <Text
+            className={s.headline}
             style={{
-              fontSize: '10vw',
+              alignSelf: 'flex-end',
+              marginTop: '-2%',
             }}
           >
             What is this?
           </Text>
-          <Text
-            style={{
-              fontSize: '20px',
-            }}
-          >
-            This technique allows you to easily recreate dom elements
-            in WebGL. By copying the origianl position and scale. This
-            allows to add fancy effects to any element. Fun!
+          <Text className={s.copy}>
+            I like to call this technique DomGl because it allows you
+            to mix WebGl with regular dom elements. We can copy the
+            position and size of images, videos and text and create
+            WebGL elements that perfectly reflect them. This allows to
+            add fancy effects to any element. Notice the fancy fadeIn
+            animation, how the text is reflected in the cube and how
+            the site bends during scroll. All of this would not be
+            possible without WebGL.
           </Text>
 
-          <Image
-            src={'/test.png'}
-            style={{
-              width: '30vw',
-              marginTop: '10%',
-              marginLeft: '10%',
-              aspectRatio: '1 / 1',
-            }}
-          />
+          <div className={s.imageGrid}>
+            <Image
+              src={'/test.png'}
+              style={{
+                width: '30vw',
+                marginTop: '10%',
+                marginLeft: '10%',
+                aspectRatio: '1 / 1',
+              }}
+            />
 
-          <Video
-            src={'/test.mp4'}
-            style={{ width: '40vw', aspectRatio: '16 / 9' }}
-          />
+            <Video
+              src={'/test.mp4'}
+              style={{ width: '40vw', aspectRatio: '16 / 9' }}
+            />
+          </div>
+
+          <Text className={s.copy}>
+            The good thing is that we can apply this effect to only
+            the elements that we want. For example This button is just
+            html + css.
+          </Text>
+
+          <Text className={s.copy}>
+            I just have limited time creating this but this allows us
+            to build stuff like:
+          </Text>
+
+          {[
+            { copy: 'Lusion', link: 'https://lusion.co/' },
+            { copy: 'Pluto', link: 'https://www.pluto.app/' },
+            {
+              copy: '14 Islands',
+              link: 'https://www.14islands.com/',
+            },
+            { copy: 'Gleec', link: 'https://gleec.com/' },
+          ].map(({ copy, link }) => (
+            <Text
+              key={link}
+              className={s.headline}
+              as="a"
+              href={link}
+              target="_blank"
+            >
+              {copy}
+            </Text>
+          ))}
         </div>
       </GlRoot>
 

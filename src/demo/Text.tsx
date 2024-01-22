@@ -1,13 +1,15 @@
-import React, { useMemo, useRef } from 'react'
+import React, { CSSProperties, useMemo, useRef } from 'react'
 import GlText from '../components/GlText'
 
 const Text = ({
   as = 'p',
+  style,
   children,
   ...rest
 }: {
-  as: string
   children: string
+  style?: CSSProperties
+  as?: string
   [x: string]: any
 }): JSX.Element => {
   const ref = useRef(null)
@@ -16,7 +18,7 @@ const Text = ({
 
   return (
     <GlText font={'/Inter-Medium.ttf'}>
-      <Tag ref={ref} {...rest}>
+      <Tag ref={ref} {...rest} style={style}>
         {children}
       </Tag>
     </GlText>

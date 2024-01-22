@@ -1,20 +1,15 @@
 import { Box, MeshTransmissionMaterial } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useLenis } from '@studio-freight/react-lenis'
 import React, { useEffect, useRef } from 'react'
 import { Mesh, Vector2 } from 'three'
 import useSceneSize from '../hooks/useSceneSize'
 
 const Object = () => {
   const ref = useRef<Mesh>(null)
-  const scrollY = useRef(0)
+
   const pointer = useRef(new Vector2())
   const pointerCurrent = useRef(new Vector2())
   const { scaleFactor } = useSceneSize()
-
-  useLenis(({ scroll }) => {
-    scrollY.current = scroll
-  })
 
   useFrame((_, delta) => {
     if (!ref.current) return
@@ -31,10 +26,9 @@ const Object = () => {
       0.5 *
       scaleFactor.x
     ref.current.position.y =
-      -scrollY.current * scaleFactor.y +
       (-pointerCurrent.current.y + window.innerHeight * 0.5) *
-        0.5 *
-        scaleFactor.y
+      0.5 *
+      scaleFactor.y
     ref.current.position.z = 1.5
   })
 
@@ -51,7 +45,7 @@ const Object = () => {
   }, [])
 
   return (
-    <Box ref={ref}>
+    <Box ref={ref} args={[1.3, 1.3, 1.3]}>
       <MeshTransmissionMaterial
         ior={1.14}
         thickness={1.4}

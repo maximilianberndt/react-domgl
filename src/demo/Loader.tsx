@@ -1,39 +1,21 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { glStore } from '../components/GlRoot'
 
 const Loader = () => {
   const progress = glStore((s) => s.loadingProgress)
 
-  const style =
-    progress !== 1
-      ? {
-          opacity: 1,
-        }
-      : {
-          opacity: 0,
-          pointerEvents: 'none',
-        }
+  useEffect(() => {
+    const loader = document.querySelector('#loader') as HTMLDivElement
 
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: 'black',
-        color: 'white',
-        transition: 'opacity 0.5s linear',
-        ...style,
-      }}
-    >
-      {progress * 100}
-    </div>
-  )
+    if (!loader) return
+    loader.innerText = `${progress * 100}`
+
+    if (progress !== 1) return
+    loader.style.opacity = '0'
+    loader.style.pointerEvents = 'none'
+  }, [progress])
+
+  return null
 }
 
 export default Loader

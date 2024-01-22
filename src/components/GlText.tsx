@@ -21,7 +21,7 @@ const GlText = ({ children, font }) => {
 
   const [style, setStyle] = useState({})
 
-  const sync = useSyncDomGl(text)
+  const { sync, ref } = useSyncDomGl(text)
 
   useEffect(() => {
     if (!text) return

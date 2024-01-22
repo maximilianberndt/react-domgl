@@ -26,7 +26,7 @@ const GlImage = ({
     []
   )
 
-  const sync = useSyncDomGl(image, { syncScale: true })
+  const { sync } = useSyncDomGl(image, { syncScale: true })
 
   useEffect(() => {
     const src = image?.currentSrc || image?.src
@@ -40,7 +40,7 @@ const GlImage = ({
   return (
     <>
       <GlElement>
-        <mesh ref={sync} geometry={geometry || plane} {...rest}>
+        <mesh {...rest} ref={sync} geometry={geometry || plane}>
           {/* TODO: Make target geometry optional */}
           <shaderMaterial
             uniforms={uniforms}

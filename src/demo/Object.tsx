@@ -21,11 +21,9 @@ const Object = () => {
     ref.current.rotation.x += 0.01
     ref.current.rotation.y += 0.01
 
-    // console.log((0.016 / delta) * 0.04)
-
     pointerCurrent.current.lerp(
       pointer.current,
-      (0.016 / delta) * 0.02
+      (delta / 0.016) * 0.03
     )
 
     ref.current.position.x =

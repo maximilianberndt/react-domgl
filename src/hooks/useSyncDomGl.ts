@@ -120,7 +120,7 @@ const useSyncDomGl = (
   //   ref(domElement)
   // }, [domElement])
 
-  return sync
+  return { sync, ref: glElement }
 }
 
 export default useSyncDomGl

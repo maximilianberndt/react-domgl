@@ -8,12 +8,12 @@ import { plane } from './GlRoot'
 
 const GlVideo = ({
   children,
-  onClick,
   geometry,
+  ...rest
 }: {
   children: ReactNode
   geometry?: BufferGeometry
-  onClick?: (e: any) => void
+  [x: string]: any
 }) => {
   const video = useMemo(() => children?.ref?.current, [children])
 
@@ -26,7 +26,7 @@ const GlVideo = ({
     []
   )
 
-  const sync = useSyncDomGl(video, { syncScale: true })
+  const { sync } = useSyncDomGl(video, { syncScale: true })
 
   useEffect(() => {
     if (video) uniforms.tMap.value = new VideoTexture(video)
@@ -35,11 +35,7 @@ const GlVideo = ({
   return (
     <>
       <GlElement>
-        <mesh
-          ref={sync}
-          onClick={onClick}
-          geometry={geometry || plane}
-        >
+        <mesh {...rest} ref={sync} geometry={geometry || plane}>
           <shaderMaterial
             uniforms={uniforms}
             fragmentShader={fragmentShader}

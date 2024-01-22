@@ -2,6 +2,7 @@ import { Stats } from '@react-three/drei'
 import { useLenis } from '@studio-freight/react-lenis'
 import { useControls } from 'leva'
 import React, { useRef } from 'react'
+import { lerp } from 'three/src/math/MathUtils'
 import GlElement from '../components/GlElement'
 import GlRoot from '../components/GlRoot'
 import Background from './Background'
@@ -15,6 +16,7 @@ import s from './demo.module.scss'
 
 const Demo = () => {
   const passRef = useRef()
+  const currentVelocity = useRef(0)
 
   const postPassProps = useControls('Post Pass', {
     frequency: { value: Math.PI, min: 1, max: 20 },
@@ -24,9 +26,15 @@ const Demo = () => {
   })
 
   useLenis(({ velocity }) => {
+    currentVelocity.current = lerp(
+      currentVelocity.current,
+      velocity,
+      0.1
+    )
+
     if (!passRef.current) return
-    passRef.current.uniforms.get('amplitude').value =
-      velocity * -0.005
+    const v = currentVelocity.current
+    passRef.current.uniforms.get('amplitude').value = v * -0.005
 
     // passRef.current.uniforms.get('blocksStrength').value = Math.abs(
     //   window.innerHeight - velocity * 1000
@@ -57,14 +65,23 @@ const Demo = () => {
               fontSize: '10vw',
             }}
           >
-            DomGL
+            DomGl
           </Text>
           <Text
             style={{
-              fontSize: '5vw',
+              fontSize: '10vw',
             }}
           >
             What is this?
+          </Text>
+          <Text
+            style={{
+              fontSize: '20px',
+            }}
+          >
+            This technique allows you to easily recreate dom elements
+            in WebGL. By copying the origianl position and scale. This
+            allows to add fancy effects to any element. Fun!
           </Text>
 
           <Image

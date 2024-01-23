@@ -1,8 +1,8 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useLoader } from '@react-three/fiber'
 import { ReactLenis } from '@studio-freight/react-lenis'
 import React, { useEffect, useRef } from 'react'
 import { Camera, LoadingManager, PlaneGeometry } from 'three'
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import tunnel from 'tunnel-rat'
 import { create } from 'zustand'
@@ -11,9 +11,13 @@ import PostProcessing, { PostProcessingProps } from './PostProcessing'
 
 export const loadingManager = new LoadingManager()
 export const textureLoader = new TextureLoader(loadingManager)
-export const gltfLoader = new GLTFLoader(loadingManager)
 export const plane = new PlaneGeometry()
 export const glTunnel = tunnel()
+
+export const useGltfLoader = (src = '') =>
+  useLoader(GLTFLoader, src, (loader) => {
+    loader.manager = loadingManager
+  })
 
 interface GlState {
   camera: Camera | null
@@ -38,6 +42,7 @@ const GlRoot = ({
 
   useEffect(() => {
     loadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
+      console.log(itemsLoaded, itemsTotal)
       glStore.setState({ loadingProgress: itemsLoaded / itemsTotal })
     }
     loadingManager.onLoad = () => {

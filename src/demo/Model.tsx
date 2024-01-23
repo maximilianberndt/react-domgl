@@ -1,13 +1,15 @@
-import { Float, useGLTF } from '@react-three/drei'
+import { Float } from '@react-three/drei'
+
 import React, { useEffect, useRef } from 'react'
 import { MeshNormalMaterial } from 'three'
+
 import GlElement from '../components/GlElement'
-import { gltfLoader } from '../components/GlRoot'
+import { useGltfLoader } from '../components/GlRoot'
 import useSyncDomGl from '../hooks/useSyncDomGl'
 
-const Model = ({ src = '', draco = false }) => {
+const Model = ({ src = '' }) => {
   const ref = useRef<HTMLDivElement>(null)
-  const gltf = useGLTF(src, draco, gltfLoader)
+  const gltf = useGltfLoader('/ym.glb')
 
   const { sync } = useSyncDomGl(ref.current, { syncScale: false })
 

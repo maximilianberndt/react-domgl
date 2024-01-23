@@ -69,8 +69,8 @@ const resize = (
 
   // Update uniforms automatically
   if (
-    mesh.material.uniforms.uPlaneSizes &&
-    mesh.material.uniforms.uImageSizes
+    mesh.material?.uniforms?.uPlaneSizes &&
+    mesh.material?.uniforms?.uImageSizes
   ) {
     mesh.material.uniforms.uPlaneSizes.value = mesh.scale
     mesh.material.uniforms.uImageSizes.value = [

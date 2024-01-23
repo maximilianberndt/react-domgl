@@ -8,6 +8,7 @@ import GlRoot from '../components/GlRoot'
 import Background from './Background'
 import Image from './Image'
 import Loader from './Loader'
+import Model from './Model'
 import Object from './Object'
 import Pass from './Pass'
 import Text from './Text'
@@ -84,13 +85,14 @@ const Demo = () => {
           >
             What is this?
           </Text>
+
           <Text className={s.copy}>
             I call this technique DomGl because it allows you to mix
             WebGl with regular dom elements. We can copy the position
-            and size of elements and perfectly copy them to the WebGL
-            world. This allows to add fancy effects to any element.
-            Notice the fancy fade in animation, how the text is
-            reflected in the cube and how the site bends during
+            and size of elements and perfectly recreate them in the
+            WebGL world. This allows to add fancy effects to any
+            element. Notice the fancy fade in animation, how the text
+            is reflected in the cube and how the site bends during
             scroll. All of this would not be possible without WebGL.
           </Text>
 
@@ -98,9 +100,6 @@ const Demo = () => {
             <Image
               src={'/test.png'}
               style={{
-                width: '30vw',
-                marginTop: '10%',
-                marginLeft: '10%',
                 aspectRatio: '1 / 1',
               }}
             />
@@ -111,7 +110,13 @@ const Demo = () => {
             />
           </div>
 
-          {/* <Text className={s.copy}>
+          <Text className={s.copy}>
+            Also we can seamlessly integrate 3d models:
+          </Text>
+
+          <Model src="ym.glb" />
+
+          <Text className={s.copy}>
             I just have limited time creating this but this allows us
             to build stuff like:
           </Text>
@@ -134,7 +139,7 @@ const Demo = () => {
             >
               {copy}
             </Text>
-          ))} */}
+          ))}
 
           <div className={s.footer}>
             <Text className={s.copy}>

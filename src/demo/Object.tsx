@@ -29,7 +29,7 @@ const Object = () => {
       (-pointerCurrent.current.y + window.innerHeight * 0.5) *
       0.5 *
       scaleFactor.y
-    ref.current.position.z = 1.5
+    ref.current.position.z = 1.2
   })
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const Object = () => {
   }, [])
 
   return (
-    <Box ref={ref} args={[1.3, 1.3, 1.3]}>
+    <Box ref={ref} args={[1, 1, 1]}>
       <MeshTransmissionMaterial
         ior={1.14}
         thickness={1.4}

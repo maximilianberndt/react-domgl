@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { ReactLenis } from '@studio-freight/react-lenis'
 import React, { useEffect, useRef } from 'react'
 import { Camera, LoadingManager, PlaneGeometry } from 'three'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import tunnel from 'tunnel-rat'
 import { create } from 'zustand'
@@ -10,6 +11,7 @@ import PostProcessing, { PostProcessingProps } from './PostProcessing'
 
 export const loadingManager = new LoadingManager()
 export const textureLoader = new TextureLoader(loadingManager)
+export const gltfLoader = new GLTFLoader(loadingManager)
 export const plane = new PlaneGeometry()
 export const glTunnel = tunnel()
 
@@ -59,6 +61,7 @@ const GlRoot = ({
           flat
           linear
           eventSource={eventSource}
+          camera={{ fov: 50 }}
           style={{
             position: 'fixed',
             top: 0,

@@ -19,7 +19,11 @@ const Demo = () => {
   const passRef = useRef();
   const currentVelocity = useRef(0);
 
-  const { enabled } = useControls("Post Processing", {
+  const effectComposerProps = useControls("Post Processing", {
+    enabled: true,
+  });
+
+  const statsProps = useControls("Stats", {
     enabled: true,
   });
 
@@ -48,9 +52,9 @@ const Demo = () => {
     <>
       <GlRoot
         passes={[<Pass key={1} ref={passRef} {...postPassProps} />]}
-        effectComposerProps={{ enabled }}
+        effectComposerProps={effectComposerProps}
       >
-        <Stats />
+        {statsProps.enabled && <Stats />}
 
         <GlElement>
           <Background />

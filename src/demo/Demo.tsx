@@ -99,8 +99,8 @@ const Demo = () => {
             WebGl with regular dom elements. We can copy the position
             and size of elements and perfectly recreate them in the
             WebGL world. This allows to add fancy effects to any
-            element. Notice the fancy fade in animation, how the text
-            is reflected in the cube and how the site bends during
+            element. Notice the fade in animation, how the text is
+            reflected in the cube and how the site bends during
             scroll. All of this would not be possible without WebGL.
           </Text>
 
@@ -154,9 +154,9 @@ const Demo = () => {
           <div className={s.footer}>
             <Text className={s.copy}>
               The good thing is that we can apply this effect to only
-              the elements that we want. For example This button is
+              the elements that we want. For example this button is
               just html + css. But we could aslo recreate it in WebGl
-              and then it could have the same animation as the iamges.
+              and then it could have the same animation as the images.
               Or a different one. The possibilities are endless.
             </Text>
 

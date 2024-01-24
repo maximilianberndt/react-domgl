@@ -1,5 +1,3 @@
-uniform vec3 uColor;
-
 uniform vec2 uImageSizes;
 uniform vec2 uPlaneSizes;
 uniform highp sampler2D tMap;

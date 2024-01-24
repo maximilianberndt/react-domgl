@@ -106,9 +106,9 @@ const Demo = () => {
 
           <div className={s.imageGrid}>
             <Image
-              src={'/test.png'}
+              src={'/header.webp'}
               style={{
-                aspectRatio: '1 / 1',
+                aspectRatio: '384 / 216',
               }}
             />
 

@@ -1,6 +1,6 @@
 import { useLenis } from '@studio-freight/react-lenis'
 import React, { CSSProperties, useRef } from 'react'
-import { BufferGeometry, Mesh } from 'three'
+import { BufferGeometry, Mesh, RepeatWrapping } from 'three'
 import GlImage from '../components/GlImage'
 
 const fragmentShader = /*glsl*/ `
@@ -24,11 +24,17 @@ void main() {
     vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
   );
 
-  // float blocks = 1. - uVelocity;//(1. - clamp(abs(uVelocity), 0., .5));
-  // // float y = floor(uv.y * blocks) / blocks;
-  // float y = fract(uv.y * floor(uv.y * blocks) / blocks);
+  float blocks = 6.0;
+  float x = floor(uv.x * blocks) / blocks;
+  float y = floor(uv.y * blocks) / blocks;
 
-  vec4 color = texture2D(tMap, vec2(uv.x, uv.y)); 
+  float distortionStrength = abs(uVelocity);
+  vec2 distortion = distortionStrength * vec2(
+    0.,
+    y * -1.5 + x * -0.4
+  );
+
+  vec4 color = texture2D(tMap, uv + distortion);
 
   gl_FragColor.rgb = color.rgb;
   gl_FragColor.a = 1.;
@@ -53,7 +59,7 @@ const Image = ({
 
     console.log(velocity)
 
-    mesh.material.uniforms.uVelocity.value = Math.abs(velocity * 0.05)
+    mesh.material.uniforms.uVelocity.value = Math.abs(velocity * 0.01)
   })
 
   return (
@@ -61,6 +67,10 @@ const Image = ({
       ref={glRef}
       geometry={geometry}
       domRef={domRef}
+      onTextureLoaded={(texture) => {
+        texture.wrapS = RepeatWrapping
+        texture.wrapT = RepeatWrapping
+      }}
       shader={{
         uniforms: { uVelocity: { value: 0 } },
         fragmentShader,

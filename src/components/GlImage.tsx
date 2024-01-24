@@ -6,7 +6,13 @@ import React, {
   useEffect,
   useMemo,
 } from 'react'
-import { BufferGeometry, Material, Mesh, Uniform } from 'three'
+import {
+  BufferGeometry,
+  Material,
+  Mesh,
+  Texture,
+  Uniform,
+} from 'three'
 import fragmentShader from '../glsl/base/frag.glsl'
 import vertexShader from '../glsl/base/vert.glsl'
 import useSyncDomGl from '../hooks/useSyncDomGl'
@@ -19,6 +25,7 @@ interface GlImageProps extends MeshProps {
   geometry?: BufferGeometry
   shader?: ShaderMaterialProps
   material?: Material
+  onTextureLoaded?: (texture: Texture) => void
 }
 
 const GlImage = forwardRef<Mesh, GlImageProps>(
@@ -28,6 +35,7 @@ const GlImage = forwardRef<Mesh, GlImageProps>(
       geometry,
       domRef,
       material,
+      onTextureLoaded,
       // TODO: Update uniforms, pass more properties
       shader = {
         uniforms: {},
@@ -53,6 +61,7 @@ const GlImage = forwardRef<Mesh, GlImageProps>(
       const src = image?.currentSrc || image?.src
       if (src) {
         textureLoader.load(src, (data) => {
+          if (onTextureLoaded) onTextureLoaded(data)
           uniforms.tMap.value = data
         })
       }

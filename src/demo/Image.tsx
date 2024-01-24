@@ -24,17 +24,17 @@ void main() {
     vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
   );
 
-  float blocks = 6.0;
+  float blocks = 4.0;
   float x = floor(uv.x * blocks) / blocks;
   float y = floor(uv.y * blocks) / blocks;
 
   float distortionStrength = abs(uVelocity);
   vec2 distortion = distortionStrength * vec2(
     0.,
-    y * -1.5 + x * -0.4
+    sin(y * -1.5 + cos(x * 2.))
   );
 
-  vec4 color = texture2D(tMap, uv + distortion);
+  vec4 color = texture2D(tMap, uv - distortion);
 
   gl_FragColor.rgb = color.rgb;
   gl_FragColor.a = 1.;
@@ -56,8 +56,6 @@ const Image = ({
   useLenis(({ velocity }) => {
     const mesh = glRef.current
     if (!mesh) return
-
-    console.log(velocity)
 
     mesh.material.uniforms.uVelocity.value = Math.abs(velocity * 0.01)
   })

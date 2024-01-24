@@ -105,17 +105,19 @@ const Demo = () => {
           </Text>
 
           <div className={s.imageGrid}>
-            <Image
-              src={'/header.webp'}
-              style={{
-                aspectRatio: '384 / 216',
-              }}
-            />
-
             <Video
               src={'/test.mp4'}
-              style={{ width: '40vw', aspectRatio: '16 / 9' }}
+              style={{ aspectRatio: '16 / 9' }}
             />
+
+            {[
+              { src: '/header.webp', aspectRatio: '384 / 216' },
+              { src: '/image-2.webp', aspectRatio: '16 / 9' },
+              { src: '/image-3.webp', aspectRatio: '3072 / 2048' },
+              { src: '/image-4.webp', aspectRatio: '16 / 9' },
+            ].map(({ src, aspectRatio }) => (
+              <Image key={src} src={src} style={{ aspectRatio }} />
+            ))}
           </div>
 
           <Text className={s.copy}>

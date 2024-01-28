@@ -30,10 +30,12 @@ export const glStore = create<GlState>(() => ({
 }))
 
 interface GlRootProps extends PostProcessingProps {
+  enabled: boolean
   children: JSX.Element[] | JSX.Element
 }
 
 const GlRoot = ({
+  enabled,
   children,
   passes = [],
   effectComposerProps,
@@ -43,12 +45,16 @@ const GlRoot = ({
   useEffect(() => {
     loadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
       console.log(itemsLoaded, itemsTotal)
-      glStore.setState({ loadingProgress: itemsLoaded / itemsTotal })
+      glStore.setState({
+        loadingProgress: Math.round(itemsLoaded / itemsTotal),
+      })
     }
     loadingManager.onLoad = () => {
       glStore.setState({ loadingProgress: 1 })
     }
   }, [])
+
+  if (!enabled) return <>{children}</>
 
   return (
     <div ref={eventSource}>

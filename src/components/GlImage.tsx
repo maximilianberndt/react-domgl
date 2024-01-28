@@ -74,7 +74,7 @@ const GlImage = forwardRef<Mesh, GlImageProps>(
             {...rest}
             ref={(el: Mesh) => {
               sync(el)
-              ref.current = el
+              if (ref?.current) ref.current = el
             }}
             geometry={geometry || plane}
             material={material}

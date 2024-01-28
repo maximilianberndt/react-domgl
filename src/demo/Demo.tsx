@@ -6,6 +6,7 @@ import { lerp } from 'three/src/math/MathUtils'
 import GlElement from '../components/GlElement'
 import GlRoot from '../components/GlRoot'
 import Background from './Background'
+import Debug from './Debug'
 import Image from './Image'
 import Loader from './Loader'
 import Model from './Model'
@@ -19,12 +20,14 @@ const Demo = () => {
   const passRef = useRef()
   const currentVelocity = useRef(0)
 
+  const { enabled } = useControls('DomGL', { enabled: true })
+
   const effectComposerProps = useControls('Post Processing', {
     enabled: true,
   })
 
   const statsProps = useControls('Stats', {
-    enabled: true,
+    enabled: false,
   })
 
   const postPassProps = useControls('Post Pass', {
@@ -54,7 +57,9 @@ const Demo = () => {
 
   return (
     <>
+      <Debug />
       <GlRoot
+        enabled={enabled}
         passes={[<Pass key={1} ref={passRef} {...postPassProps} />]}
         effectComposerProps={effectComposerProps}
       >

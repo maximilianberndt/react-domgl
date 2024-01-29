@@ -1,7 +1,7 @@
 import { MeshProps, ShaderMaterialProps } from '@react-three/fiber'
 import React, {
   ReactNode,
-  Ref,
+  RefObject,
   forwardRef,
   useEffect,
   useMemo,
@@ -21,7 +21,7 @@ import { plane, textureLoader } from './GlRoot'
 
 interface GlImageProps extends MeshProps {
   children: ReactNode
-  domRef: Ref<HTMLImageElement>
+  domRef: RefObject<HTMLImageElement>
   geometry?: BufferGeometry
   shader?: ShaderMaterialProps
   material?: Material
@@ -54,10 +54,12 @@ const GlImage = forwardRef<Mesh, GlImageProps>(
       []
     )
 
-    const image = domRef?.current
-    const { sync } = useSyncDomGl(image, { syncScale: true })
+    const { sync } = useSyncDomGl(domRef?.current, {
+      syncScale: true,
+    })
 
     useEffect(() => {
+      const image = domRef?.current
       const src = image?.currentSrc || image?.src
       if (src) {
         textureLoader.load(src, (data) => {
@@ -65,7 +67,7 @@ const GlImage = forwardRef<Mesh, GlImageProps>(
           uniforms.tMap.value = data
         })
       }
-    }, [image])
+    }, [])
 
     return (
       <>
@@ -74,7 +76,7 @@ const GlImage = forwardRef<Mesh, GlImageProps>(
             {...rest}
             ref={(el: Mesh) => {
               sync(el)
-              if (ref?.current) ref.current = el
+              if (ref) ref.current = el
             }}
             geometry={geometry || plane}
             material={material}

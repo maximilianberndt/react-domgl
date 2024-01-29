@@ -37,7 +37,7 @@ const Demo = () => {
     frequency: { value: Math.PI, min: 1, max: 20 },
     amplitude: { value: 0, min: 0, max: 1 },
     blocksStrength: { value: 1 },
-    rotation: { value: -10, min: -20, max: 0 },
+    rotation: { value: -0, min: -20, max: 0 },
   })
 
   const lenis = useLenis(({ velocity }) => {
@@ -68,11 +68,15 @@ const Demo = () => {
             if (pass) {
               // FadeIn animation
               const rotation = pass.uniforms.get('rotation')
-              gsap.to(rotation, {
-                value: 0,
-                duration: 1.5,
-                ease: 'expo.inOut',
-              })
+              gsap.fromTo(
+                rotation,
+                { value: -12 },
+                {
+                  value: 0,
+                  duration: 1.2,
+                  ease: 'expo.inOut',
+                }
+              )
 
               // Fade out loader
               if (loader) {
@@ -140,7 +144,7 @@ const Demo = () => {
 
           <div className={s.imageGrid}>
             <Video
-              src={'/test.mp4'}
+              src={'/file_example_MP4_1280_10MG.mp4'}
               style={{ aspectRatio: '16 / 9' }}
             />
 

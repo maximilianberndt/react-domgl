@@ -7,7 +7,6 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import tunnel from 'tunnel-rat'
 import { create } from 'zustand'
 import GlCamera from './GlCamera'
-import PostProcessing, { PostProcessingProps } from './PostProcessing'
 
 export const loadingManager = new LoadingManager()
 export const textureLoader = new TextureLoader(loadingManager)
@@ -29,28 +28,31 @@ export const glStore = create<GlState>(() => ({
   loadingProgress: 0,
 }))
 
-interface GlRootProps extends PostProcessingProps {
+interface GlRootProps {
   enabled: boolean
+  onLoad: () => void
+  onLoadingProgress: (progress: number) => void
   children: JSX.Element[] | JSX.Element
 }
 
 const GlRoot = ({
   enabled,
   children,
-  passes = [],
-  effectComposerProps,
+  onLoad,
+  onLoadingProgress,
 }: GlRootProps) => {
   const eventSource = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     loadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
-      console.log(itemsLoaded, itemsTotal)
-      glStore.setState({
-        loadingProgress: Math.round(itemsLoaded / itemsTotal),
-      })
+      const loadingProgress = Math.round(itemsLoaded / itemsTotal)
+
+      glStore.setState({ loadingProgress })
+      if (onLoadingProgress) onLoadingProgress(loadingProgress)
     }
     loadingManager.onLoad = () => {
       glStore.setState({ loadingProgress: 1 })
+      if (onLoad) onLoad()
     }
   }, [])
 
@@ -87,11 +89,6 @@ const GlRoot = ({
         >
           <GlCamera />
           <glTunnel.Out />
-
-          <PostProcessing
-            passes={passes}
-            effectComposerProps={effectComposerProps}
-          />
         </Canvas>
 
         {children}

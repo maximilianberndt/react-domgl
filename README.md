@@ -10,7 +10,6 @@ https://mbe-domgl.netlify.app/
 
 - Lenis by studio freight
 - react-three-fiber
-- Postprocessing with @react-three/postprocessing
 
 ## Status
 
@@ -18,7 +17,6 @@ https://mbe-domgl.netlify.app/
 - [x] Image
 - [x] Video
 - [x] Text
-- [x] Post Processing
 - [x] Loading Progress
 - [ ] Mouse Flow
 - [ ] 3D models

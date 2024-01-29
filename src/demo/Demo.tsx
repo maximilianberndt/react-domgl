@@ -1,5 +1,7 @@
 import { Stats } from '@react-three/drei'
+import { EffectComposer } from '@react-three/postprocessing'
 import { useLenis } from '@studio-freight/react-lenis'
+import gsap from 'gsap'
 import { useControls } from 'leva'
 import React, { useRef } from 'react'
 import { lerp } from 'three/src/math/MathUtils'
@@ -8,13 +10,14 @@ import GlRoot from '../components/GlRoot'
 import Background from './Background'
 import Debug from './Debug'
 import Image from './Image'
-import Loader from './Loader'
 import Model from './Model'
 import Object from './Object'
 import Pass from './Pass'
 import Text from './Text'
 import Video from './Video'
 import s from './demo.module.scss'
+
+const loader = document.querySelector('#loader') as HTMLDivElement
 
 const Demo = () => {
   const passRef = useRef()
@@ -34,7 +37,7 @@ const Demo = () => {
     frequency: { value: Math.PI, min: 1, max: 20 },
     amplitude: { value: 0, min: 0, max: 1 },
     blocksStrength: { value: 1 },
-    rotation: { value: 0, min: -20, max: 0 },
+    rotation: { value: -10, min: -20, max: 0 },
   })
 
   const lenis = useLenis(({ velocity }) => {
@@ -47,23 +50,49 @@ const Demo = () => {
     if (!passRef.current) return
     const v = currentVelocity.current
     passRef.current.uniforms.get('amplitude').value = v * -0.006
-
-    // passRef.current.uniforms.get('blocksStrength').value = Math.abs(
-    //   window.innerHeight - velocity * 1000
-    // )
-
-    // console.log(passRef.current.uniforms.get('blocksStrength').value)
   })
 
   return (
     <>
       <Debug />
+
       <GlRoot
         enabled={enabled}
-        passes={[<Pass key={1} ref={passRef} {...postPassProps} />]}
-        effectComposerProps={effectComposerProps}
+        onLoadingProgress={(progress) => {
+          if (loader) loader.innerText = `${progress * 100}`
+        }}
+        onLoad={() => {
+          const interval = setInterval(() => {
+            const pass = passRef.current
+
+            if (pass) {
+              // FadeIn animation
+              const rotation = pass.uniforms.get('rotation')
+              gsap.to(rotation, {
+                value: 0,
+                duration: 1.5,
+                ease: 'expo.inOut',
+              })
+
+              // Fade out loader
+              if (loader) {
+                loader.style.transitionDelay = '0.2s'
+                loader.style.opacity = '0'
+                loader.style.pointerEvents = 'none'
+              }
+
+              clearInterval(interval)
+            }
+          }, 50)
+        }}
       >
         {statsProps.enabled && <Stats />}
+
+        <GlElement>
+          <EffectComposer {...effectComposerProps}>
+            <Pass key={1} ref={passRef} {...postPassProps} />
+          </EffectComposer>
+        </GlElement>
 
         <GlElement>
           <Background />
@@ -182,8 +211,6 @@ const Demo = () => {
           </div>
         </div>
       </GlRoot>
-
-      <Loader />
     </>
   )
 }

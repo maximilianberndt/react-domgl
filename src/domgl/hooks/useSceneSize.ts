@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useWindowSize } from 'usehooks-ts'
-import { glStore } from '../components/GlRoot'
+import { glStore } from '../utils/glStore'
 
 export type ScaleFactor = { x: number; y: number }
 export type Size = { width: number; height: number }

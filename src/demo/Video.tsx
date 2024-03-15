@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
-import GlVideo from '../components/GlVideo'
-import { useIntersection } from '../utils/intersectionObserver'
+import GlVideo from '../domgl/GlVideo'
+import { useIntersection } from './utils/intersectionObserver'
 
 const Video = ({ src, style }) => {
   const ref = useRef<HTMLVideoElement>(null)

@@ -1,8 +1,9 @@
-import { Box, MeshTransmissionMaterial } from '@react-three/drei'
+import { MeshTransmissionMaterial } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import React, { useEffect, useRef } from 'react'
 import { Mesh, Vector2 } from 'three'
-import useSceneSize from '../hooks/useSceneSize'
+import { useGltfLoader } from '../domgl/hooks/useGltfLoader'
+import useSceneSize from '../domgl/hooks/useSceneSize'
 
 const Object = () => {
   const ref = useRef<Mesh>(null)
@@ -10,10 +11,11 @@ const Object = () => {
   const pointer = useRef(new Vector2())
   const pointerCurrent = useRef(new Vector2())
   const { scaleFactor } = useSceneSize()
+  const gltf = useGltfLoader('/ym-2.glb')
 
   useFrame((_, delta) => {
     if (!ref.current) return
-    ref.current.rotation.x += 0.01
+    // ref.current.rotation.x += 0.01
     ref.current.rotation.y += 0.01
 
     pointerCurrent.current.lerp(
@@ -45,17 +47,23 @@ const Object = () => {
   }, [])
 
   return (
-    <Box ref={ref} args={[1, 1, 1]}>
-      <MeshTransmissionMaterial
-        ior={1.14}
-        thickness={1.4}
-        anisotropy={0.14}
-        chromaticAberration={0.14}
-        distortion={0.14}
-        distortionScale={1.4}
-        temporalDistortion={0.14}
-      />
-    </Box>
+    <group dispose={null} ref={ref} scale={2}>
+      <mesh
+        geometry={gltf.nodes.M_Level_3.geometry}
+        rotation={[0, 0, 0.258]}
+      >
+        <MeshTransmissionMaterial
+          // {...props}
+          ior={1.14}
+          thickness={1.4}
+          anisotropy={0.14}
+          chromaticAberration={0.14}
+          distortion={0.14}
+          distortionScale={1.4}
+          temporalDistortion={0.14}
+        />
+      </mesh>
+    </group>
   )
 }
 

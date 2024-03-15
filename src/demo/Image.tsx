@@ -1,7 +1,7 @@
 import { useLenis } from '@studio-freight/react-lenis'
 import React, { CSSProperties, useRef } from 'react'
 import { BufferGeometry, Mesh, RepeatWrapping } from 'three'
-import GlImage from '../components/GlImage'
+import GlImage from '../domgl/GlImage'
 
 const fragmentShader = /*glsl*/ `
 uniform vec3 uColor;

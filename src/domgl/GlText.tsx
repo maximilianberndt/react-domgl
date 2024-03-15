@@ -1,8 +1,8 @@
 import { Text } from '@react-three/drei'
 import React, { useEffect, useState } from 'react'
-import useSceneSize from '../hooks/useSceneSize'
-import useSyncDomGl from '../hooks/useSyncDomGl'
 import GlElement from './GlElement'
+import useSceneSize from './hooks/useSceneSize'
+import useSyncDomGl from './hooks/useSyncDomGl'
 
 const GlText = ({ children, font }) => {
   const { scaleFactor } = useSceneSize()

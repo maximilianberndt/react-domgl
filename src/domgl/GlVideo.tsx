@@ -7,11 +7,11 @@ import React, {
   useMemo,
 } from 'react'
 import { BufferGeometry, Material, Mesh, VideoTexture } from 'three'
-import fragmentShader from '../glsl/base/frag.glsl'
-import vertexShader from '../glsl/base/vert.glsl'
-import useSyncDomGl from '../hooks/useSyncDomGl'
 import GlElement from './GlElement'
-import { plane } from './GlRoot'
+import fragmentShader from './glsl/base/frag'
+import vertexShader from './glsl/base/vert'
+import useSyncDomGl from './hooks/useSyncDomGl'
+import { plane } from './utils/plane'
 
 interface GlVideoProps extends MeshProps {
   children: ReactNode

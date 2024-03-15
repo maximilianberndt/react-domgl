@@ -2,10 +2,9 @@ import { Float } from '@react-three/drei'
 
 import React, { useEffect, useRef } from 'react'
 import { MeshNormalMaterial } from 'three'
-
-import GlElement from '../components/GlElement'
-import { useGltfLoader } from '../components/GlRoot'
-import useSyncDomGl from '../hooks/useSyncDomGl'
+import GlElement from '../domgl/GlElement'
+import { useGltfLoader } from '../domgl/hooks/useGltfLoader'
+import useSyncDomGl from '../domgl/hooks/useSyncDomGl'
 
 const Model = ({ src = '' }) => {
   const ref = useRef<HTMLDivElement>(null)

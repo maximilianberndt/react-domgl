@@ -1,8 +1,8 @@
 import { useThree } from '@react-three/fiber'
 import { useLenis } from '@studio-freight/react-lenis'
 import React, { useEffect } from 'react'
-import useSceneSize from '../hooks/useSceneSize'
-import { glStore } from './GlRoot'
+import useSceneSize from './hooks/useSceneSize'
+import { glStore } from './utils/glStore'
 
 const GlCamera = () => {
   const { scaleFactor } = useSceneSize()

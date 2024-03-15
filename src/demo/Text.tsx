@@ -1,5 +1,5 @@
 import React, { CSSProperties, useMemo, useRef } from 'react'
-import GlText from '../components/GlText'
+import GlText from '../domgl/GlText'
 
 const Text = ({
   as = 'p',

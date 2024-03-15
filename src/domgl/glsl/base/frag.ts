@@ -1,4 +1,4 @@
-uniform vec2 uImageSizes;
+const frag = /* glsl */ `uniform vec2 uImageSizes;
 uniform vec2 uPlaneSizes;
 uniform highp sampler2D tMap;
 
@@ -20,4 +20,6 @@ void main() {
 
 	gl_FragColor.rgb = color.rgb;
 	gl_FragColor.a = 1.;
-}
+}`
+
+export default frag

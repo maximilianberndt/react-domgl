@@ -66,11 +66,11 @@ const update = (
 
   // Update uniforms automatically
   if (
-    mesh.material?.uniforms?.uPlaneSizes &&
-    mesh.material?.uniforms?.uImageSizes
+    mesh.program?.uniforms?.uPlaneSizes &&
+    mesh.program?.uniforms?.uImageSizes
   ) {
-    mesh.material.uniforms.uPlaneSizes.value = mesh.scale
-    mesh.material.uniforms.uImageSizes.value = [
+    mesh.program.uniforms.uPlaneSizes.value = mesh.scale
+    mesh.program.uniforms.uImageSizes.value = [
       bounds.width,
       bounds.height,
     ]

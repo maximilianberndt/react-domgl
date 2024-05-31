@@ -1,5 +1,4 @@
 import { useLenis } from 'lenis/react'
-// import gsap from 'gsap'
 import { Mesh } from 'ogl'
 import React, { useRef, useState } from 'react'
 import { useFrame } from 'react-ogl'
@@ -121,7 +120,7 @@ const Demo = () => {
         </GlElement> */}
 
         <div className={s.grid}>
-          <div style={{ height: '120vh' }} />
+          <div style={{ height: '80vh' }} />
 
           <GlElement>
             <Box />
@@ -139,7 +138,7 @@ const Demo = () => {
             Just scroll and you will see
           </Text>
 
-          {/* <Text className={s.headline} as="h1">
+          <Text className={s.headline} as="h1">
             Hello -
           </Text>
           <Text
@@ -150,9 +149,9 @@ const Demo = () => {
             }}
           >
             What is this?
-          </Text> */}
+          </Text>
 
-          {/* <Text className={s.copy}>
+          <Text className={s.copy}>
             I call this technique DomGl because it allows you to mix
             WebGl with regular dom elements. We can copy the position
             and size of elements and perfectly recreate them in the
@@ -160,7 +159,7 @@ const Demo = () => {
             element. Notice the fade in animation, how the text is
             reflected in the cube and how the site bends during
             scroll. All of this would not be possible without WebGL.
-          </Text> */}
+          </Text>
 
           <div className={s.imageGrid}>
             <Video
@@ -178,17 +177,11 @@ const Demo = () => {
             ))}
           </div>
 
-          {/* <Text className={s.copy}>
-            Also we can seamlessly integrate 3d models:
-          </Text>
-
-          <Model src="ym.glb" />
-
           <Text className={s.copy}>
             I just have limited time creating this but this allows us
             to build stuff like:
-          </Text> */}
-          {/* 
+          </Text>
+
           {[
             { copy: 'Lusion', link: 'https://lusion.co/' },
             { copy: 'Pluto', link: 'https://www.pluto.app/' },
@@ -207,16 +200,16 @@ const Demo = () => {
             >
               {copy}
             </Text>
-          ))} */}
+          ))}
 
           <div className={s.footer}>
-            {/* <Text className={s.copy}>
+            <Text className={s.copy}>
               The good thing is that we can apply this effect to only
               the elements that we want. For example this button is
               just html + css. But we could aslo recreate it in WebGl
               and then it could have the same animation as the images.
               Or a different one. The possibilities are endless.
-            </Text> */}
+            </Text>
 
             <button
               className={s.button}

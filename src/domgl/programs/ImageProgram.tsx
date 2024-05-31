@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ImageProgram = ({ texture }) => {
+const ImageProgram = ({ texture, ...rest }) => {
   return (
     <program
       vertex={
@@ -44,8 +44,7 @@ const ImageProgram = ({ texture }) => {
           vec4 color = texture2D(tMap, uv); 
       
       
-        gl_FragColor.rgb = color.rgb;
-        gl_FragColor.a = 1.;
+        gl_FragColor = color;
         }
       `
       }
@@ -54,6 +53,7 @@ const ImageProgram = ({ texture }) => {
         uImageSizes: { value: [1, 1] },
         tMap: { value: texture },
       }}
+      {...rest}
     />
   )
 }

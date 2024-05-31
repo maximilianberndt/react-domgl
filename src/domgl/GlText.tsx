@@ -1,6 +1,12 @@
-import { Mesh, TextureLoader } from 'ogl'
-import React, { ReactNode, RefObject, forwardRef } from 'react'
-import { useLoader } from 'react-ogl'
+import { Mesh } from 'ogl'
+import React, {
+  ReactNode,
+  RefObject,
+  Suspense,
+  forwardRef,
+  useMemo,
+} from 'react'
+import { useOGL } from 'react-ogl'
 import GlElement from './GlElement'
 import useSyncDomGl from './hooks/useSyncDomGl'
 import ImageProgram from './programs/ImageProgram'
@@ -15,15 +21,16 @@ interface GlTextProps {
 
 const WebGlText = forwardRef<Mesh, Omit<GlTextProps, 'children'>>(
   ({ domRef, offsetX, offsetY, ...rest }, ref) => {
+    const { gl } = useOGL()
     const { sync } = useSyncDomGl(domRef, {
       syncScale: true,
       offsetX,
       offsetY,
     })
 
-    const texture = useLoader(
-      TextureLoader,
-      createTextureFromCanvas(domRef)
+    const texture = useMemo(
+      () => createTextureFromCanvas(domRef, gl),
+      [gl, domRef]
     )
 
     return (
@@ -35,7 +42,7 @@ const WebGlText = forwardRef<Mesh, Omit<GlTextProps, 'children'>>(
         }}
       >
         <plane />
-        <ImageProgram texture={texture} />
+        <ImageProgram texture={texture} transparent={true} />
       </mesh>
     )
   }
@@ -46,7 +53,9 @@ const GlText = forwardRef<Mesh, GlTextProps>(
     return (
       <>
         <GlElement>
-          <WebGlText {...props} ref={ref} />
+          <Suspense>
+            <WebGlText {...props} ref={ref} />
+          </Suspense>
         </GlElement>
 
         {children}

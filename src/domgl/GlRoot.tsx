@@ -11,12 +11,6 @@ interface GlRootProps {
   // onLoad?: () => void
   // onLoadingProgress?: (progress: number) => void
   children: JSX.Element[] | JSX.Element
-  // camera?: Partial<{
-  //   fov: number
-  //   near: number
-  //   far: number
-  //   position: number[]
-  // }>
   lenis?: Partial<LenisOptions>
 }
 
@@ -26,11 +20,7 @@ const GlRoot = ({
   lenis = {},
 }: // onLoad,
 // onLoadingProgress,
-// camera,
-// lenis,
 GlRootProps) => {
-  // const eventSource = useRef<HTMLDivElement>(null)
-
   // useEffect(() => {
   //   loadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
   //     const loadingProgress = Math.round(itemsLoaded / itemsTotal)
@@ -47,21 +37,19 @@ GlRootProps) => {
   if (!enabled) return <ReactLenis root>{children}</ReactLenis>
 
   return (
-    // <div ref={eventSource}>
-    <Suspense>
-      <ReactLenis
-        root
-        options={{
-          // gestureOrientation: 'both',
-          // smoothWheel: true,
-          // smoothTouch: true,
-          // wheelEventsTarget: document.body,
-          // syncTouch: true,
-          ...lenis,
-        }}
-      >
+    <ReactLenis
+      root
+      options={{
+        // gestureOrientation: 'both',
+        // smoothWheel: true,
+        // smoothTouch: true,
+        // wheelEventsTarget: document.body,
+        // syncTouch: true,
+        ...lenis,
+      }}
+    >
+      <Suspense>
         <Canvas
-          // eventSource={eventSource}
           events={events}
           camera={{ fov: 50, position: [0, 0, 5] }}
           style={{
@@ -78,11 +66,10 @@ GlRootProps) => {
           <GlCamera />
           <glTunnel.Out />
         </Canvas>
+      </Suspense>
 
-        {children}
-      </ReactLenis>
-    </Suspense>
-    // </div>
+      {children}
+    </ReactLenis>
   )
 }
 

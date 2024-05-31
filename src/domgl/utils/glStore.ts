@@ -1,4 +1,4 @@
-import { Camera } from 'three'
+import { Camera } from 'ogl'
 import { create } from 'zustand'
 
 interface GlState {

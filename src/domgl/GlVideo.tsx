@@ -24,9 +24,9 @@ const WebglVideo = forwardRef<Mesh, Omit<GlVideoProps, 'children'>>(
       offsetX,
       offsetY,
     })
-    const video = domRef?.current
 
-    const texture = useLoader(TextureLoader, video.src)
+    const video = domRef?.current
+    const texture = useLoader(TextureLoader, video!.src)
 
     useFrame(() => {
       if (!video) return

@@ -3,7 +3,8 @@ import React from 'react'
 const ImageProgram = ({ texture }) => {
   return (
     <program
-      vertex={`
+      vertex={
+        /* GLSL */ `
         attribute vec3 position;
         attribute vec2 uv;
   
@@ -17,8 +18,10 @@ const ImageProgram = ({ texture }) => {
   
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
-      `}
-      fragment={`
+      `
+      }
+      fragment={
+        /* GLSL */ `
         precision highp float;
   
         uniform vec2 uImageSizes;
@@ -44,7 +47,8 @@ const ImageProgram = ({ texture }) => {
         gl_FragColor.rgb = color.rgb;
         gl_FragColor.a = 1.;
         }
-      `}
+      `
+      }
       uniforms={{
         uPlaneSizes: { value: [1, 1] },
         uImageSizes: { value: [1, 1] },

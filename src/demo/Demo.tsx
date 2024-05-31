@@ -5,6 +5,7 @@ import React, { useRef } from 'react'
 import { useFrame } from 'react-ogl'
 import GlElement from '../domgl/GlElement'
 import GlRoot from '../domgl/GlRoot'
+import Background from './Background'
 import Image from './Image'
 import Text from './Text'
 import Video from './Video'
@@ -14,7 +15,10 @@ import s from './demo.module.css'
 
 const Box = () => {
   const mesh = useRef<Mesh>()
-  useFrame(() => (mesh.current.rotation.z += 0.01))
+  useFrame(() => {
+    mesh.current.rotation.z += 0.01
+    mesh.current.rotation.x += 0.01
+  })
 
   return (
     <mesh ref={mesh} onPointerOver={(e) => console.log(e)}>
@@ -94,16 +98,16 @@ const Demo = () => {
       //   }, 50)
       // }}
       >
+        <GlElement>
+          <Background />
+        </GlElement>
+
         {/* {statsProps.enabled && <Stats />}
 
         <GlElement>
           <EffectComposer {...effectComposerProps}>
             <Pass key={1} ref={passRef} {...postPassProps} />
           </EffectComposer>
-        </GlElement>
-
-        <GlElement>
-          <Background />
         </GlElement>
 
         <GlElement>

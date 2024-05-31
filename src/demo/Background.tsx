@@ -1,15 +1,22 @@
-import { useFrame } from '@react-three/fiber'
-import React, { useMemo, useRef } from 'react'
+import { Color } from 'ogl'
+import React, { useRef } from 'react'
+import { useFrame } from 'react-ogl'
 
-const vertexShader = /* glsl */ `
+const vertex = /* glsl */ `
+attribute vec2 uv;
+attribute vec2 position;
+
 varying vec2 vUv;
 
 void main() {
-  vUv = uv;
-  gl_Position = modelMatrix * vec4(position, 1.0);
-}`
+    vUv = uv;
+    gl_Position = vec4(position, 0, 1);
+}
+`
 
-const fragmentShader = /* glsl */ `
+const fragment = /* glsl */ `
+precision highp float;
+
 varying vec2 vUv;
 uniform float uTime;
 
@@ -22,7 +29,7 @@ return mat2(
     s, c
 );
 }
-  
+
 vec2 rotate(vec2 v, float angle) {
   return rotation2d(angle) * v;
 }
@@ -52,29 +59,32 @@ void main() {
 }
 `
 
-const Background = (): JSX.Element => {
-  const bg = useRef(null)
+const Program = () => {
+  const ref = useRef(null)
 
-  const uniforms = useMemo(
-    () => ({
-      uTime: { value: 0 },
-    }),
-    []
-  )
-
-  useFrame((_, delta) => {
-    if (bg.current) uniforms.uTime.value += delta
+  useFrame((_, t) => {
+    if (ref.current) ref.current.uniforms.uTime.value = t * 0.0001
   })
 
   return (
-    <mesh ref={bg} renderOrder={-1} frustumCulled={false}>
-      <planeGeometry args={[2, 2, 1]} />
-      <shaderMaterial
-        depthWrite={false}
-        uniforms={uniforms}
-        fragmentShader={fragmentShader}
-        vertexShader={vertexShader}
-      />
+    <program
+      ref={ref}
+      depthWrite={false}
+      uniforms={{
+        uTime: { value: 0 },
+        uColor: { value: new Color(0.3, 0.2, 0.5) },
+      }}
+      vertex={vertex}
+      fragment={fragment}
+    />
+  )
+}
+
+const Background = (): JSX.Element => {
+  return (
+    <mesh frustumCulled={false}>
+      <plane args={[{ width: 2, height: 2 }]} />
+      <Program />
     </mesh>
   )
 }

@@ -3,6 +3,7 @@ import { ReactLenis } from 'lenis/react'
 import React, { Suspense } from 'react'
 import { Canvas } from 'react-ogl'
 import GlCamera from './GlCamera'
+import events from './utils/events'
 import { glTunnel } from './utils/glTunnel'
 
 interface GlRootProps {
@@ -22,6 +23,7 @@ interface GlRootProps {
 const GlRoot = ({
   enabled = true,
   children,
+  lenis = {},
 }: // onLoad,
 // onLoadingProgress,
 // camera,
@@ -51,15 +53,16 @@ GlRootProps) => {
         root
         options={{
           // gestureOrientation: 'both',
-          smoothWheel: true,
-          smoothTouch: true,
-          wheelEventsTarget: document.body,
-          syncTouch: true,
-          // ...lenis,
+          // smoothWheel: true,
+          // smoothTouch: true,
+          // wheelEventsTarget: document.body,
+          // syncTouch: true,
+          ...lenis,
         }}
       >
         <Canvas
           // eventSource={eventSource}
+          events={events}
           camera={{ fov: 50, position: [0, 0, 5] }}
           style={{
             position: 'fixed',

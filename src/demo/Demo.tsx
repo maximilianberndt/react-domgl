@@ -1,7 +1,7 @@
 import { useLenis } from 'lenis/react'
 // import gsap from 'gsap'
 import { Mesh } from 'ogl'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useFrame } from 'react-ogl'
 import GlElement from '../domgl/GlElement'
 import GlRoot from '../domgl/GlRoot'
@@ -16,12 +16,18 @@ import s from './demo.module.css'
 const Box = () => {
   const mesh = useRef<Mesh>()
   useFrame(() => {
-    mesh.current.rotation.z += 0.01
-    mesh.current.rotation.x += 0.01
+    mesh.current.rotation.z += 0.005
+    mesh.current.rotation.x += 0.005
   })
 
+  const [scale, setScale] = useState(1)
+
   return (
-    <mesh ref={mesh} onPointerOver={(e) => console.log(e)}>
+    <mesh
+      ref={mesh}
+      onClick={(e) => setScale((s) => (s === 1 ? 1.4 : 1))}
+      scale={scale}
+    >
       <box />
       <normalProgram />
     </mesh>

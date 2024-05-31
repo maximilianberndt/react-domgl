@@ -24,7 +24,7 @@ const WebGlText = forwardRef<Mesh, Omit<GlTextProps, 'children'>>(
     })
 
     useEffect(() => {
-      console.log(domRef)
+      // console.log(domRef.current)
     })
 
     return (

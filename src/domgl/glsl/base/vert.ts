@@ -1,4 +1,5 @@
-const vert = /* glsl */ `varying vec2 vUv;
+const vert = /* glsl */ `
+varying vec2 vUv;
 
 void main() {
   vUv = uv;

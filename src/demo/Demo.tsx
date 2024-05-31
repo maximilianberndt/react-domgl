@@ -1,96 +1,100 @@
-import { Stats } from '@react-three/drei'
-import { EffectComposer } from '@react-three/postprocessing'
-import { useLenis } from '@studio-freight/react-lenis'
-import gsap from 'gsap'
-import { useControls } from 'leva'
+import { useLenis } from 'lenis/react'
+// import gsap from 'gsap'
+import { Mesh } from 'ogl'
 import React, { useRef } from 'react'
-import { lerp } from 'three/src/math/MathUtils'
+import { useFrame } from 'react-ogl'
 import GlElement from '../domgl/GlElement'
 import GlRoot from '../domgl/GlRoot'
-import Background from './Background'
-import Debug from './Debug'
 import Image from './Image'
-import Model from './Model'
-import Object from './Object'
-import Pass from './Pass'
 import Text from './Text'
 import Video from './Video'
-import s from './demo.module.scss'
+import s from './demo.module.css'
 
-const loader = document.querySelector('#loader') as HTMLDivElement
+// const loader = document.querySelector('#loader') as HTMLDivElement
+
+const Box = () => {
+  const mesh = useRef<Mesh>()
+  useFrame(() => (mesh.current.rotation.z += 0.01))
+
+  return (
+    <mesh ref={mesh} onPointerOver={(e) => console.log(e)}>
+      <box />
+      <normalProgram />
+    </mesh>
+  )
+}
 
 const Demo = () => {
   const passRef = useRef()
   const currentVelocity = useRef(0)
 
-  const { enabled } = useControls('DomGL', { enabled: true })
+  // const { enabled } = useControls('DomGL', { enabled: true })
 
-  const effectComposerProps = useControls('Post Processing', {
-    enabled: true,
-  })
+  // const effectComposerProps = useControls('Post Processing', {
+  //   enabled: true,
+  // })
 
-  const statsProps = useControls('Stats', {
-    enabled: false,
-  })
+  // const statsProps = useControls('Stats', {
+  //   enabled: false,
+  // })
 
-  const postPassProps = useControls('Post Pass', {
-    frequency: { value: Math.PI, min: 1, max: 20 },
-    amplitude: { value: 0, min: 0, max: 1 },
-    blocksStrength: { value: 1 },
-    rotation: { value: -0, min: -20, max: 0 },
-  })
+  // const postPassProps = useControls('Post Pass', {
+  //   frequency: { value: Math.PI, min: 1, max: 20 },
+  //   amplitude: { value: 0, min: 0, max: 1 },
+  //   blocksStrength: { value: 1 },
+  //   rotation: { value: -0, min: -20, max: 0 },
+  // })
 
   const lenis = useLenis(({ velocity }) => {
-    currentVelocity.current = lerp(
-      currentVelocity.current,
-      velocity,
-      0.1
-    )
-
-    if (!passRef.current) return
-    const v = currentVelocity.current
-    passRef.current.uniforms.get('amplitude').value = v * -0.006
+    // currentVelocity.current = lerp(
+    //   currentVelocity.current,
+    //   velocity,
+    //   0.1
+    // )
+    // if (!passRef.current) return
+    // const v = currentVelocity.current
+    // passRef.current.uniforms.get('amplitude').value = v * -0.006
   })
 
   return (
     <>
-      <Debug />
+      {/* <Debug /> */}
 
       <GlRoot
-        enabled={enabled}
-        onLoadingProgress={(progress) => {
-          if (loader) loader.innerText = `${progress * 100}`
-        }}
-        onLoad={() => {
-          const interval = setInterval(() => {
-            const pass = passRef.current
+      // enabled={enabled}
+      // onLoadingProgress={(progress) => {
+      //   if (loader) loader.innerText = `${progress * 100}`
+      // }}
+      // onLoad={() => {
+      //   const interval = setInterval(() => {
+      //     const pass = passRef.current
 
-            if (pass) {
-              // FadeIn animation
-              const rotation = pass.uniforms.get('rotation')
-              gsap.fromTo(
-                rotation,
-                { value: -12 },
-                {
-                  value: 0,
-                  duration: 1.2,
-                  ease: 'expo.inOut',
-                }
-              )
+      //     if (pass) {
+      //       // FadeIn animation
+      //       const rotation = pass.uniforms.get('rotation')
+      //       gsap.fromTo(
+      //         rotation,
+      //         { value: -12 },
+      //         {
+      //           value: 0,
+      //           duration: 1.2,
+      //           ease: 'expo.inOut',
+      //         }
+      //       )
 
-              // Fade out loader
-              if (loader) {
-                loader.style.transitionDelay = '0.2s'
-                loader.style.opacity = '0'
-                loader.style.pointerEvents = 'none'
-              }
+      //       // Fade out loader
+      //       if (loader) {
+      //         loader.style.transitionDelay = '0.2s'
+      //         loader.style.opacity = '0'
+      //         loader.style.pointerEvents = 'none'
+      //       }
 
-              clearInterval(interval)
-            }
-          }, 50)
-        }}
+      //       clearInterval(interval)
+      //     }
+      //   }, 50)
+      // }}
       >
-        {statsProps.enabled && <Stats />}
+        {/* {statsProps.enabled && <Stats />}
 
         <GlElement>
           <EffectComposer {...effectComposerProps}>
@@ -104,9 +108,15 @@ const Demo = () => {
 
         <GlElement>
           <Object />
-        </GlElement>
+        </GlElement> */}
 
         <div className={s.grid}>
+          <div style={{ height: '120vh' }} />
+
+          <GlElement>
+            <Box />
+          </GlElement>
+
           <Text
             className={s.copy}
             style={{
@@ -119,7 +129,7 @@ const Demo = () => {
             Just scroll and you will see
           </Text>
 
-          <Text className={s.headline} as="h1">
+          {/* <Text className={s.headline} as="h1">
             Hello -
           </Text>
           <Text
@@ -130,9 +140,9 @@ const Demo = () => {
             }}
           >
             What is this?
-          </Text>
+          </Text> */}
 
-          <Text className={s.copy}>
+          {/* <Text className={s.copy}>
             I call this technique DomGl because it allows you to mix
             WebGl with regular dom elements. We can copy the position
             and size of elements and perfectly recreate them in the
@@ -140,7 +150,7 @@ const Demo = () => {
             element. Notice the fade in animation, how the text is
             reflected in the cube and how the site bends during
             scroll. All of this would not be possible without WebGL.
-          </Text>
+          </Text> */}
 
           <div className={s.imageGrid}>
             <Video
@@ -158,7 +168,7 @@ const Demo = () => {
             ))}
           </div>
 
-          <Text className={s.copy}>
+          {/* <Text className={s.copy}>
             Also we can seamlessly integrate 3d models:
           </Text>
 
@@ -167,8 +177,8 @@ const Demo = () => {
           <Text className={s.copy}>
             I just have limited time creating this but this allows us
             to build stuff like:
-          </Text>
-
+          </Text> */}
+          {/* 
           {[
             { copy: 'Lusion', link: 'https://lusion.co/' },
             { copy: 'Pluto', link: 'https://www.pluto.app/' },
@@ -187,16 +197,16 @@ const Demo = () => {
             >
               {copy}
             </Text>
-          ))}
+          ))} */}
 
           <div className={s.footer}>
-            <Text className={s.copy}>
+            {/* <Text className={s.copy}>
               The good thing is that we can apply this effect to only
               the elements that we want. For example this button is
               just html + css. But we could aslo recreate it in WebGl
               and then it could have the same animation as the images.
               Or a different one. The possibilities are endless.
-            </Text>
+            </Text> */}
 
             <button
               className={s.button}

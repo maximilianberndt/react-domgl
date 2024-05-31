@@ -1,96 +1,59 @@
-import { MeshProps, ShaderMaterialProps } from '@react-three/fiber'
+import { Mesh, TextureLoader } from 'ogl'
 import React, {
   ReactNode,
   RefObject,
+  Suspense,
   forwardRef,
-  useEffect,
-  useMemo,
 } from 'react'
-import {
-  BufferGeometry,
-  Material,
-  Mesh,
-  Texture,
-  Uniform,
-} from 'three'
+import { useLoader } from 'react-ogl'
 import GlElement from './GlElement'
-import fragmentShader from './glsl/base/frag'
-import vertexShader from './glsl/base/vert'
-import useSyncDomGl from './hooks/useSyncDomGl'
-import { plane } from './utils/plane'
-import { textureLoader } from './utils/textureLoader'
+import useSyncDomGl from './hooks/useSyncDomGl.js'
+import ImageProgram from './programs/ImageProgram'
 
-interface GlImageProps extends MeshProps {
+// interface GlImageProps extends MeshProps {
+interface GlImageProps {
   children: ReactNode
   domRef: RefObject<HTMLImageElement>
-  geometry?: BufferGeometry
-  shader?: ShaderMaterialProps
-  material?: Material
-  onTextureLoaded?: (texture: Texture) => void
+  offsetX?: RefObject<number>
+  offsetY?: RefObject<number>
 }
 
-const GlImage = forwardRef<Mesh, GlImageProps>(
-  (
-    {
-      children,
-      geometry,
-      domRef,
-      material,
-      onTextureLoaded,
-      // TODO: Update uniforms, pass more properties
-      shader = {
-        uniforms: {},
-      },
-      ...rest
-    },
-    ref
-  ) => {
-    const uniforms = useMemo(
-      () => ({
-        uPlaneSizes: new Uniform([1, 1]),
-        uImageSizes: new Uniform([1, 1]),
-        tMap: { value: {} },
-        ...shader.uniforms,
-      }),
-      []
-    )
-
-    const { sync } = useSyncDomGl(domRef?.current, {
+const WebglImage = forwardRef<Mesh, Omit<GlImageProps, 'children'>>(
+  ({ domRef, offsetX, offsetY, ...rest }, ref) => {
+    const { sync } = useSyncDomGl(domRef, {
       syncScale: true,
+      offsetX,
+      offsetY,
     })
 
-    useEffect(() => {
-      const image = domRef?.current
-      const src = image?.currentSrc || image?.src
-      if (src) {
-        textureLoader.load(src, (data) => {
-          if (onTextureLoaded) onTextureLoaded(data)
-          uniforms.tMap.value = data
-        })
-      }
-    }, [])
+    const image = domRef?.current
+    const src = image?.currentSrc || image?.src
 
+    const texture = useLoader(TextureLoader, src)
+
+    return (
+      <mesh
+        {...rest}
+        ref={(el: Mesh) => {
+          sync(el)
+          if (ref) ref.current = el
+        }}
+      >
+        <plane />
+        <ImageProgram texture={texture} />
+      </mesh>
+    )
+  }
+)
+
+const GlImage = forwardRef<Mesh, GlImageProps>(
+  ({ children, ...props }, ref) => {
     return (
       <>
         <GlElement>
-          <mesh
-            {...rest}
-            ref={(el: Mesh) => {
-              sync(el)
-              if (ref) ref.current = el
-            }}
-            geometry={geometry || plane}
-            material={material}
-          >
-            {!material && (
-              <shaderMaterial
-                fragmentShader={fragmentShader}
-                vertexShader={vertexShader}
-                {...shader}
-                uniforms={uniforms}
-              />
-            )}
-          </mesh>
+          <Suspense>
+            <WebglImage {...props} ref={ref} />
+          </Suspense>
         </GlElement>
 
         {children}

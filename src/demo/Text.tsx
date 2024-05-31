@@ -1,23 +1,21 @@
-import React, { CSSProperties, useMemo, useRef } from 'react'
+import React, { CSSProperties, ElementType, useRef } from 'react'
 import GlText from '../domgl/GlText'
 
 const Text = ({
-  as = 'p',
+  as: Tag = 'p',
   style,
   children,
   ...rest
 }: {
   children: string
   style?: CSSProperties
-  as?: string
+  as?: ElementType
   [x: string]: any
 }): JSX.Element => {
   const ref = useRef(null)
 
-  const Tag = useMemo(() => as, [as])
-
   return (
-    <GlText font={'/Inter-Medium.ttf'}>
+    <GlText domRef={ref}>
       <Tag ref={ref} {...rest} style={style}>
         {children}
       </Tag>

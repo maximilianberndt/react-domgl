@@ -1,77 +1,66 @@
-import { MeshProps, ShaderMaterialProps } from '@react-three/fiber'
+import { Mesh, TextureLoader } from 'ogl'
 import React, {
   ReactNode,
   RefObject,
+  Suspense,
   forwardRef,
-  useEffect,
-  useMemo,
 } from 'react'
-import { BufferGeometry, Material, Mesh, VideoTexture } from 'three'
+import { useFrame, useLoader } from 'react-ogl'
 import GlElement from './GlElement'
-import fragmentShader from './glsl/base/frag'
-import vertexShader from './glsl/base/vert'
 import useSyncDomGl from './hooks/useSyncDomGl'
-import { plane } from './utils/plane'
+import ImageProgram from './programs/ImageProgram'
 
-interface GlVideoProps extends MeshProps {
+interface GlVideoProps {
   children: ReactNode
   domRef: RefObject<HTMLVideoElement>
-  geometry?: BufferGeometry
-  shader?: ShaderMaterialProps
-  material?: Material
+  offsetX?: RefObject<number>
+  offsetY?: RefObject<number>
 }
 
-const GlVideo = forwardRef<Mesh, GlVideoProps>(
-  (
-    {
-      children,
-      geometry,
-      domRef,
-      material,
-      // TODO: Update uniforms, pass more properties
-      shader = {
-        uniforms: {},
-      },
-      ...rest
-    },
-    ref
-  ) => {
+const WebglVideo = forwardRef<Mesh, Omit<GlVideoProps, 'children'>>(
+  ({ domRef, offsetX, offsetY, ...rest }, ref) => {
+    const { sync } = useSyncDomGl(domRef, {
+      syncScale: true,
+      offsetX,
+      offsetY,
+    })
     const video = domRef?.current
 
-    const uniforms = useMemo(
-      () => ({
-        uPlaneSizes: { value: [1, 1] },
-        uImageSizes: { value: [1, 1] },
-        tMap: { value: {} },
-        ...shader.uniforms,
-      }),
-      []
+    const texture = useLoader(TextureLoader, video.src)
+
+    useFrame(() => {
+      if (!video) return
+
+      // Attach video and/or update texture when video is ready
+      if (video.readyState >= video.HAVE_ENOUGH_DATA) {
+        if (!texture.image) texture.image = video
+        texture.needsUpdate = true
+      }
+    })
+
+    return (
+      <mesh
+        {...rest}
+        ref={(el: Mesh) => {
+          sync(el)
+          if (ref) ref.current = el
+        }}
+      >
+        <plane />
+        <ImageProgram texture={texture} />
+      </mesh>
     )
+  }
+)
 
-    const { sync } = useSyncDomGl(video, { syncScale: true })
-
-    useEffect(() => {
-      if (video) uniforms.tMap.value = new VideoTexture(video)
-    }, [video])
-
+const GlVideo = forwardRef<Mesh, GlVideoProps>(
+  ({ children, ...props }, ref) => {
     return (
       <>
         <GlElement>
-          <mesh
-            {...rest}
-            ref={(el: Mesh) => {
-              sync(el)
-              if (ref?.current) ref.current = el
-            }}
-            geometry={geometry || plane}
-          >
-            <shaderMaterial
-              fragmentShader={fragmentShader}
-              vertexShader={vertexShader}
-              {...shader}
-              uniforms={uniforms}
-            />
-          </mesh>
+          <Suspense>
+            <WebglVideo {...props} ref={ref} />
+          </Suspense>
         </GlElement>
 
         {children}

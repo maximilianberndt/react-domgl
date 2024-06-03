@@ -6,22 +6,25 @@ import GlCamera from './GlCamera'
 import events from './utils/events'
 import { glTunnel } from './utils/glTunnel'
 
-interface GlRootProps {
+type GlRootProps = {
   enabled?: boolean
   // onLoad?: () => void
   // onLoadingProgress?: (progress: number) => void
   children: JSX.Element[] | JSX.Element
-  lenis?: Partial<LenisOptions>
+  lenisOptions?: Partial<LenisOptions>
   onCreated?: RenderProps['onCreated']
-}
+  renderer?: RenderProps['renderer']
+  camera?: RenderProps['camera']
+} & RenderProps
 
 const GlRoot = ({
   enabled = true,
   children,
-  lenis = {},
-  onCreated,
+  lenisOptions = {},
+  camera = { fov: 50, position: [0, 0, 5] },
+  dpr = [1, 2],
+  ...renderProps
 }: // onLoad,
-// onLoadingProgress,
 GlRootProps) => {
   // useEffect(() => {
   //   loadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
@@ -47,15 +50,15 @@ GlRootProps) => {
         // smoothTouch: true,
         // wheelEventsTarget: document.body,
         // syncTouch: true,
-        ...lenis,
+        ...lenisOptions,
       }}
     >
       <Suspense>
         <Canvas
-          dpr={[1, 2]}
+          {...renderProps}
+          dpr={dpr}
+          camera={camera}
           events={events}
-          onCreated={onCreated}
-          camera={{ fov: 50, position: [0, 0, 5] }}
           style={{
             position: 'fixed',
             top: 0,

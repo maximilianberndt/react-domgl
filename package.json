@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "canvas-txt": "^4.1.1",
     "lenis": "1.0.45",
-    "leva": "^0.9.35",
     "ogl": "^1.0.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

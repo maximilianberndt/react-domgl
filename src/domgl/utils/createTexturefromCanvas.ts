@@ -1,3 +1,4 @@
+import { drawText } from 'canvas-txt'
 import { OGLRenderingContext, Texture } from 'ogl'
 import { RefObject } from 'react'
 
@@ -8,24 +9,40 @@ const ctx = canvas.getContext('2d')
 
 const createTextureFromCanvas = (
   node: RefObject<HTMLElement>,
-  gl: OGLRenderingContext
+  gl: OGLRenderingContext,
+  font = 'sans-serif'
 ): Texture => {
   const text = node.current
   if (!text || !gl || !ctx) return null
 
+  const dpr = window.devicePixelRatio
   const bounds = text.getBoundingClientRect()
   const s = getComputedStyle(text)
-  const fontSize = parseFloat(s.fontSize)
 
-  canvas.width = bounds.width * 2
-  canvas.height = bounds.height * 2
+  const align = { start: 'left' }[s.textAlign] || ('left' as const)
+  const fontSize = parseFloat(s.fontSize) * dpr
+  const lineHeight =
+    s.lineHeight === 'normal' ? 1.2 : parseFloat(s.lineHeight) * 2
+
+  const width = bounds.width * (dpr + 0.01)
+  const height = bounds.height * (dpr + 0.01)
+
+  canvas.width = width
+  canvas.height = height
 
   ctx.clearRect(0.0, 0.0, canvas.width, canvas.height)
 
-  ctx.font = `normal ${fontSize * 2}px sans-serif`
-  ctx.fillStyle = s.color
-  ctx.textBaseline = 'middle'
-  ctx.fillText(text.innerText, 0, bounds.height * 1)
+  drawText(ctx, text.innerText, {
+    x: 0,
+    y: 0,
+    width,
+    height,
+    fontSize,
+    align,
+    lineHeight,
+    font,
+    fontWeight: s.fontWeight,
+  })
 
   const texture = new Texture(gl)
   const img = new Image()

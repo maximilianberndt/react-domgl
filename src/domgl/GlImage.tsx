@@ -33,7 +33,7 @@ const WebglImage = forwardRef<Mesh, Omit<GlImageProps, 'children'>>(
 
     return (
       <mesh
-        onPointerMove={(e) => console.log(e)}
+        // onPointerMove={(e) => console.log(e)}
         {...rest}
         ref={(el: Mesh) => {
           sync(el)

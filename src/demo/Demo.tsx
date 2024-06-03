@@ -6,6 +6,7 @@ import GlElement from '../domgl/GlElement'
 import GlRoot from '../domgl/GlRoot'
 import Background from './Background'
 import Image from './Image'
+import MouseFlow from './MouseFlow'
 import Text from './Text'
 import Video from './Video'
 import s from './demo.module.css'
@@ -119,6 +120,10 @@ const Demo = () => {
           <Object />
         </GlElement> */}
 
+        <GlElement>
+          <MouseFlow />
+        </GlElement>
+
         <div className={s.grid}>
           <div style={{ height: '80vh' }} />
 
@@ -206,7 +211,7 @@ const Demo = () => {
             <Text className={s.copy}>
               The good thing is that we can apply this effect to only
               the elements that we want. For example this button is
-              just html + css. But we could aslo recreate it in WebGl
+              just html + css. But we could also recreate it in WebGl
               and then it could have the same animation as the images.
               Or a different one. The possibilities are endless.
             </Text>

@@ -1,7 +1,7 @@
 import { LenisOptions } from 'lenis'
 import { ReactLenis } from 'lenis/react'
 import React, { Suspense } from 'react'
-import { Canvas } from 'react-ogl'
+import { Canvas, RenderProps } from 'react-ogl'
 import GlCamera from './GlCamera'
 import events from './utils/events'
 import { glTunnel } from './utils/glTunnel'
@@ -12,12 +12,14 @@ interface GlRootProps {
   // onLoadingProgress?: (progress: number) => void
   children: JSX.Element[] | JSX.Element
   lenis?: Partial<LenisOptions>
+  onCreated?: RenderProps['onCreated']
 }
 
 const GlRoot = ({
   enabled = true,
   children,
   lenis = {},
+  onCreated,
 }: // onLoad,
 // onLoadingProgress,
 GlRootProps) => {
@@ -52,6 +54,7 @@ GlRootProps) => {
         <Canvas
           dpr={[1, 2]}
           events={events}
+          onCreated={onCreated}
           camera={{ fov: 50, position: [0, 0, 5] }}
           style={{
             position: 'fixed',
@@ -61,7 +64,6 @@ GlRootProps) => {
             height: '100vh',
             width: '100vw',
             zIndex: -1,
-            // pointerEvents: 'none',
           }}
         >
           <GlCamera />

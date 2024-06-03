@@ -50,6 +50,7 @@ GlRootProps) => {
     >
       <Suspense>
         <Canvas
+          dpr={[1, 2]}
           events={events}
           camera={{ fov: 50, position: [0, 0, 5] }}
           style={{

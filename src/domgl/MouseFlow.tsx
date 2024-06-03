@@ -1,6 +1,7 @@
 import { Flowmap, OGLRenderingContext, Program, Vec2 } from 'ogl'
 import React, { useEffect, useRef } from 'react'
 import { useFrame, useOGL } from 'react-ogl'
+import { glStore } from './utils/glStore'
 
 const vertex = /* glsl */ `
 attribute vec2 uv;
@@ -81,7 +82,7 @@ const updateMouse =
     velocity.needsUpdate = true
   }
 
-const MouseFlow = () => {
+const MouseFlow = ({ debug }: { debug?: boolean }) => {
   const flow = useRef<Flowmap>()
   const program = useRef<Program>()
   const gl = useOGL((s) => s.gl)
@@ -111,8 +112,15 @@ const MouseFlow = () => {
   })
 
   useEffect(() => {
+    if (!program.current || !flow.current || !debug) return
     program.current.uniforms.tFlow.value = flow.current.uniform
-  }, [])
+
+    glStore.setState({ mouseFlow: flow.current })
+
+    return () => {
+      glStore.setState({ mouseFlow: null })
+    }
+  }, [debug])
 
   useEffect(() => {
     const _updateMouse = updateMouse(gl)
@@ -132,18 +140,20 @@ const MouseFlow = () => {
     <>
       <flowmap ref={flow} />
 
-      <mesh frustumCulled={false} position={[-1, 1, 0]}>
-        <plane args={[{ width: 0.5, height: 0.5 }]} />
-        <program
-          ref={program}
-          vertex={vertex}
-          fragment={fragment}
-          uniforms={{
-            uTime: { value: 0 },
-            tFlow: { value: {} },
-          }}
-        />
-      </mesh>
+      {debug && (
+        <mesh frustumCulled={false} position={[-1, 1, 0]}>
+          <plane args={[{ width: 0.5, height: 0.5 }]} />
+          <program
+            ref={program}
+            vertex={vertex}
+            fragment={fragment}
+            uniforms={{
+              uTime: { value: 0 },
+              tFlow: { value: {} },
+            }}
+          />
+        </mesh>
+      )}
     </>
   )
 }

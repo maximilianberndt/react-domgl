@@ -4,9 +4,9 @@ import React, { useRef, useState } from 'react'
 import { useFrame } from 'react-ogl'
 import GlElement from '../domgl/GlElement'
 import GlRoot from '../domgl/GlRoot'
+import MouseFlow from '../domgl/MouseFlow'
 import Background from './Background'
 import Image from './Image'
-import MouseFlow from './MouseFlow'
 import Text from './Text'
 import Video from './Video'
 import s from './demo.module.css'
@@ -121,7 +121,7 @@ const Demo = () => {
         </GlElement> */}
 
         <GlElement>
-          <MouseFlow />
+          <MouseFlow debug />
         </GlElement>
 
         <div className={s.grid}>

@@ -17,6 +17,7 @@ https://mbe-domgl.netlify.app/
 - [x] Camera
 - [x] Image
 - [x] Video
-- [ ] Text
+- [x] Mouse Flow
+- [x] Text
 - [ ] Loading Progress
-- [ ] Mouse Flow
+- [ ] Post Processing

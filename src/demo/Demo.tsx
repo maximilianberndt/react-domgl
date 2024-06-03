@@ -1,6 +1,6 @@
 import { useLenis } from 'lenis/react'
 import { Mesh } from 'ogl'
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useFrame } from 'react-ogl'
 import GlElement from '../domgl/GlElement'
 import GlRoot from '../domgl/GlRoot'
@@ -35,89 +35,25 @@ const Box = () => {
 }
 
 const Demo = () => {
-  const passRef = useRef()
-  const currentVelocity = useRef(0)
+  const lenis = useLenis()
 
-  // const { enabled } = useControls('DomGL', { enabled: true })
-
-  // const effectComposerProps = useControls('Post Processing', {
-  //   enabled: true,
-  // })
-
-  // const statsProps = useControls('Stats', {
-  //   enabled: false,
-  // })
-
-  // const postPassProps = useControls('Post Pass', {
-  //   frequency: { value: Math.PI, min: 1, max: 20 },
-  //   amplitude: { value: 0, min: 0, max: 1 },
-  //   blocksStrength: { value: 1 },
-  //   rotation: { value: -0, min: -20, max: 0 },
-  // })
-
-  const lenis = useLenis(({ velocity }) => {
-    // currentVelocity.current = lerp(
-    //   currentVelocity.current,
-    //   velocity,
-    //   0.1
-    // )
-    // if (!passRef.current) return
-    // const v = currentVelocity.current
-    // passRef.current.uniforms.get('amplitude').value = v * -0.006
-  })
+  const scrollToTop = useCallback(() => {
+    lenis.scrollTo(0, {
+      duration: 2,
+      easing: (x) =>
+        x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2,
+    })
+  }, [lenis])
 
   return (
     <>
-      {/* <Debug /> */}
-
-      <GlRoot
-      // enabled={enabled}
-      // onLoadingProgress={(progress) => {
-      //   if (loader) loader.innerText = `${progress * 100}`
-      // }}
-      // onLoad={() => {
-      //   const interval = setInterval(() => {
-      //     const pass = passRef.current
-
-      //     if (pass) {
-      //       // FadeIn animation
-      //       const rotation = pass.uniforms.get('rotation')
-      //       gsap.fromTo(
-      //         rotation,
-      //         { value: -12 },
-      //         {
-      //           value: 0,
-      //           duration: 1.2,
-      //           ease: 'expo.inOut',
-      //         }
-      //       )
-
-      //       // Fade out loader
-      //       if (loader) {
-      //         loader.style.transitionDelay = '0.2s'
-      //         loader.style.opacity = '0'
-      //         loader.style.pointerEvents = 'none'
-      //       }
-
-      //       clearInterval(interval)
-      //     }
-      //   }, 50)
-      // }}
-      >
+      <GlRoot>
         <GlElement>
           <Background />
         </GlElement>
-
-        {/* {statsProps.enabled && <Stats />}
-
+        {/* 
         <GlElement>
-          <EffectComposer {...effectComposerProps}>
-            <Pass key={1} ref={passRef} {...postPassProps} />
-          </EffectComposer>
-        </GlElement>
-
-        <GlElement>
-          <Object />
+          <PostProcessing />
         </GlElement> */}
 
         <GlElement>
@@ -216,18 +152,7 @@ const Demo = () => {
               Or a different one. The possibilities are endless.
             </Text>
 
-            <button
-              className={s.button}
-              onClick={() =>
-                lenis.scrollTo(0, {
-                  duration: 2,
-                  easing: (x) =>
-                    x < 0.5
-                      ? 8 * x * x * x * x
-                      : 1 - Math.pow(-2 * x + 2, 4) / 2,
-                })
-              }
-            >
+            <button className={s.button} onClick={scrollToTop}>
               <span className={s.headline}>Scroll to top</span>
             </button>
           </div>

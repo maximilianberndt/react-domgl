@@ -5,8 +5,8 @@ import { useFrame } from 'react-ogl'
 import GlElement from '../domgl/GlElement'
 import GlRoot from '../domgl/GlRoot'
 import MouseFlow from '../domgl/MouseFlow'
-import Background from './Background'
 import Image from './Image'
+import PostProcessing from './PostProcessing'
 import Text from './Text'
 import Video from './Video'
 import s from './demo.module.css'
@@ -48,16 +48,16 @@ const Demo = () => {
   return (
     <>
       <GlRoot>
-        <GlElement>
+        {/* <GlElement>
           <Background />
-        </GlElement>
-        {/* 
-        <GlElement>
-          <PostProcessing />
         </GlElement> */}
 
         <GlElement>
-          <MouseFlow debug />
+          <PostProcessing />
+        </GlElement>
+
+        <GlElement>
+          <MouseFlow />
         </GlElement>
 
         <div className={s.grid}>

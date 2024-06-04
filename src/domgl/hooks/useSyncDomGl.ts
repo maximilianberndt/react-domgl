@@ -63,18 +63,6 @@ const update = (
   syncScale && updateScale(mesh, bounds, scaleFactor)
   updateX(mesh, offsetX.current || 0, bounds, scaleFactor, sceneSize)
   updateY(mesh, offsetY.current || 0, bounds, scaleFactor, sceneSize)
-
-  // Update uniforms automatically
-  if (
-    mesh.program?.uniforms?.uPlaneSizes &&
-    mesh.program?.uniforms?.uImageSizes
-  ) {
-    mesh.program.uniforms.uPlaneSizes.value = mesh.scale
-    mesh.program.uniforms.uImageSizes.value = [
-      bounds.width,
-      bounds.height,
-    ]
-  }
 }
 
 type SyncOptions = {

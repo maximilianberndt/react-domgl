@@ -24,14 +24,9 @@ uniform float uTime;
 varying vec2 vUv;
 
 void main() {
-
     // R and G values are velocity in the x and y direction
     // B value is the velocity length
     vec3 flow = texture2D(tFlow, vUv).rgb;
-
-    // // Use flow to adjust the uv lookup of a texture
-    // vec2 uv = gl_FragCoord.xy / 600.0;
-    // uv += flow.xy * 0.05;
 
     // // Oscillate between raw values and the affected texture above
     // tex = mix(tex, flow * 0.5 + 0.5, smoothstep(-0.3, 0.7, sin(uTime)));
@@ -112,8 +107,11 @@ const MouseFlow = ({ debug }: { debug?: boolean }) => {
   })
 
   useEffect(() => {
-    if (!program.current || !flow.current || !debug) return
-    program.current.uniforms.tFlow.value = flow.current.uniform
+    if (!flow.current) return
+
+    if (program.current) {
+      program.current.uniforms.tFlow.value = flow.current.uniform
+    }
 
     glStore.setState({ mouseFlow: flow.current })
 

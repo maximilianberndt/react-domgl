@@ -9,6 +9,7 @@ import { useLoader } from 'react-ogl'
 import GlElement from './GlElement'
 import useSyncDomGl from './hooks/useSyncDomGl.js'
 import ImageProgram from './programs/ImageProgram'
+import { glStore } from './utils/glStore'
 
 // interface GlImageProps extends MeshProps {
 interface GlImageProps {
@@ -20,6 +21,8 @@ interface GlImageProps {
 
 const WebglImage = forwardRef<Mesh, Omit<GlImageProps, 'children'>>(
   ({ domRef, offsetX, offsetY, ...rest }, ref) => {
+    const plane = glStore((s) => s.plane)
+
     const { sync } = useSyncDomGl(domRef, {
       syncScale: true,
       offsetX,
@@ -39,8 +42,9 @@ const WebglImage = forwardRef<Mesh, Omit<GlImageProps, 'children'>>(
           sync(el)
           if (ref) ref.current = el
         }}
+        geometry={plane}
       >
-        <plane />
+        {/* <primitive object={plane} /> */}
         <ImageProgram texture={texture} />
       </mesh>
     )

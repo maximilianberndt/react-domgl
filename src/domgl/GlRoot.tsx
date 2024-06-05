@@ -1,9 +1,11 @@
 import { LenisOptions } from 'lenis'
 import { ReactLenis } from 'lenis/react'
-import React, { Suspense } from 'react'
-import { Canvas, RenderProps } from 'react-ogl'
+import { Plane } from 'ogl'
+import React, { Suspense, useEffect } from 'react'
+import { Canvas, RenderProps, useOGL } from 'react-ogl'
 import GlCamera from './GlCamera'
 import events from './utils/events'
+import { glStore } from './utils/glStore'
 import { glTunnel } from './utils/glTunnel'
 
 type GlRootProps = {
@@ -16,6 +18,18 @@ type GlRootProps = {
   renderer?: RenderProps['renderer']
   camera?: RenderProps['camera']
 } & RenderProps
+
+const BasePlane = () => {
+  const gl = useOGL((s) => s.gl)
+
+  useEffect(() => {
+    if (!gl) return
+
+    glStore.setState({ plane: new Plane(gl) })
+  }, [gl])
+
+  return null
+}
 
 const GlRoot = ({
   enabled = true,
@@ -70,6 +84,7 @@ GlRootProps) => {
           }}
         >
           <GlCamera />
+          <BasePlane />
           <glTunnel.Out />
         </Canvas>
       </Suspense>

@@ -11,6 +11,7 @@ import GlElement from './GlElement'
 import useSyncDomGl from './hooks/useSyncDomGl'
 import ImageProgram from './programs/ImageProgram'
 import createTextureFromCanvas from './utils/createTexturefromCanvas'
+import { glStore } from './utils/glStore'
 
 interface GlTextProps {
   children: ReactNode
@@ -22,6 +23,8 @@ interface GlTextProps {
 const WebGlText = forwardRef<Mesh, Omit<GlTextProps, 'children'>>(
   ({ domRef, offsetX, offsetY, ...rest }, ref) => {
     const { gl } = useOGL()
+    const plane = glStore((s) => s.plane)
+
     const { sync } = useSyncDomGl(domRef, {
       syncScale: true,
       offsetX,
@@ -40,8 +43,8 @@ const WebGlText = forwardRef<Mesh, Omit<GlTextProps, 'children'>>(
           sync(el)
           if (ref) ref.current = el
         }}
+        geometry={plane}
       >
-        <plane />
         <ImageProgram texture={texture} transparent={true} />
       </mesh>
     )

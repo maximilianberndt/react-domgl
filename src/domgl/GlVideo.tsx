@@ -9,6 +9,7 @@ import { useFrame, useLoader } from 'react-ogl'
 import GlElement from './GlElement'
 import useSyncDomGl from './hooks/useSyncDomGl'
 import ImageProgram from './programs/ImageProgram'
+import { glStore } from './utils/glStore'
 
 interface GlVideoProps {
   children: ReactNode
@@ -19,6 +20,8 @@ interface GlVideoProps {
 
 const WebglVideo = forwardRef<Mesh, Omit<GlVideoProps, 'children'>>(
   ({ domRef, offsetX, offsetY, ...rest }, ref) => {
+    const plane = glStore((s) => s.plane)
+
     const { sync } = useSyncDomGl(domRef, {
       syncScale: true,
       offsetX,
@@ -45,8 +48,8 @@ const WebglVideo = forwardRef<Mesh, Omit<GlVideoProps, 'children'>>(
           sync(el)
           if (ref) ref.current = el
         }}
+        geometry={plane}
       >
-        <plane />
         <ImageProgram texture={texture} />
       </mesh>
     )

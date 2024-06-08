@@ -53,6 +53,10 @@ GlRootProps) => {
   //   }
   // }, [])
 
+  useEffect(() => {
+    glStore.getState().resize()
+  }, [])
+
   if (!enabled) return <ReactLenis root>{children}</ReactLenis>
 
   return (

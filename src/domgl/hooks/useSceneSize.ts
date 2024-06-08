@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { useWindowSize } from 'usehooks-ts'
 import { glStore } from '../utils/glStore'
 
 export type ScaleFactor = { x: number; y: number }
@@ -11,9 +10,8 @@ const useSceneSize = (): {
   scaleFactor: ScaleFactor
 } => {
   const camera = glStore((s) => s.camera)
-  const windowSize = useWindowSize()
+  const windowSize = glStore((s) => s.windowSize)
 
-  // TODO: Should this be a memo or a ref?
   const sceneSize = useMemo(() => {
     if (!camera)
       return {
@@ -36,7 +34,7 @@ const useSceneSize = (): {
         y: Math.min(height / windowSize.height, 1),
       },
     }
-  }, [windowSize.width, windowSize.height, camera])
+  }, [windowSize.width, windowSize.height, windowSize, camera])
 
   return sceneSize
 }

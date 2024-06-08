@@ -1,14 +1,11 @@
 import { Mesh, Transform } from 'ogl'
-import { EventHandlers, Instance, RootState } from 'react-ogl'
+import { Instance, RootState } from 'react-ogl'
 
 // Copy of this https://github.com/pmndrs/react-ogl/blob/main/src/utils.ts
 // Just taking event.clientX for calculating the mouse coordinates
 
 export function createEvents(state: RootState) {
-  const handleEvent = (
-    event: PointerEvent,
-    type: keyof EventHandlers
-  ) => {
+  const handleEvent = (event: PointerEvent, type: any) => {
     // Convert mouse coordinates
     // state.mouse!.x = (event.offsetX / state.size.width) * 2 - 1
     // state.mouse!.y = -(event.offsetY / state.size.height) * 2 + 1

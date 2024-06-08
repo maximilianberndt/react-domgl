@@ -1,9 +1,13 @@
 import { Mesh } from 'ogl'
-import { RefObject, useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef, type RefObject } from 'react'
 // import useResizeObserver from 'use-resize-observer'
 import { useLenis } from 'lenis/react'
 import { useFrame } from 'react-ogl'
-import useSceneSize, { ScaleFactor, Size } from './useSceneSize'
+import { glStore } from '../utils/glStore'
+import useSceneSize, {
+  type ScaleFactor,
+  type Size,
+} from './useSceneSize'
 
 const updateX = (
   plane: Mesh,
@@ -71,50 +75,56 @@ type SyncOptions = {
   offsetY: RefObject<number>
 }
 
+const hideDomElement = (element: HTMLElement) => {
+  const isPlane = { IMG: true, VIDEO: true }[element.nodeName]
+
+  if (isPlane) {
+    element.style.visibility = 'hidden'
+  } else {
+    // isText
+    element.style.color = 'transparent'
+  }
+}
+
 const useSyncDomGl = (
-  domElement: RefObject<HTMLElement>,
+  domElementRef: RefObject<HTMLElement>,
   {
     syncScale = false,
     offsetX = { current: 0 },
     offsetY = { current: 0 },
   }: Partial<SyncOptions> = {}
 ) => {
-  const glElement = useRef<Mesh | null>(null)
+  const meshRef = useRef<Mesh>()
   const boundsRef = useRef<DOMRect>()
   const { scaleFactor, sceneSize } = useSceneSize()
+  const windowSize = glStore((s) => s.windowSize)
 
   const lenis = useLenis()
 
-  const sync = useCallback(
-    (mesh: Mesh) => {
-      if (!domElement.current || !mesh) return
-      glElement.current = mesh
+  const updateBounds = useCallback(() => {
+    if (!domElementRef.current) return
+    const bounds = domElementRef.current.getBoundingClientRect()
 
-      const isPlane = { IMG: true, VIDEO: true }[
-        domElement.current.nodeName
-      ]
+    boundsRef.current = {
+      top: bounds.top + lenis.scroll,
+      left: bounds.left,
+      width: bounds.width,
+      height: bounds.height,
+    }
+  }, [])
 
-      if (isPlane) {
-        domElement.current.style.visibility = 'hidden'
-      } else {
-        // isText
-        domElement.current.style.color = 'transparent'
-      }
+  const sync = useCallback((mesh: Mesh) => {
+    if (!domElementRef.current || !mesh) return
+    meshRef.current = mesh
+    hideDomElement(domElementRef.current)
+  }, [])
 
-      const bounds = domElement.current.getBoundingClientRect()
-
-      boundsRef.current = {
-        top: bounds.top + lenis.scroll,
-        left: bounds.left,
-        width: bounds.width,
-        height: bounds.height,
-      }
-    },
-    [lenis]
-  )
+  useEffect(() => {
+    updateBounds(meshRef.current)
+  }, [windowSize.height, windowSize.width, updateBounds])
 
   useFrame(() => {
-    const mesh = glElement.current
+    const mesh = meshRef.current
     const bounds = boundsRef.current
     if (!mesh || !bounds) return
 
@@ -128,14 +138,7 @@ const useSyncDomGl = (
     })
   })
 
-  // TODO: Do we need resize observer?
-  // const { ref } = useResizeObserver<HTMLElement>({ onResize: resize })
-
-  // useEffect(() => {
-  //   ref(domElement)
-  // }, [domElement])
-
-  return { sync, ref: glElement }
+  return sync
 }
 
 export default useSyncDomGl

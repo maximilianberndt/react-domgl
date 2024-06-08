@@ -1,9 +1,10 @@
 import { Mesh, TextureLoader } from 'ogl'
 import React, {
-  ReactNode,
-  RefObject,
   Suspense,
   forwardRef,
+  useCallback,
+  type ReactNode,
+  type RefObject,
 } from 'react'
 import { useFrame, useLoader } from 'react-ogl'
 import GlElement from './GlElement'
@@ -22,11 +23,21 @@ const WebglVideo = forwardRef<Mesh, Omit<GlVideoProps, 'children'>>(
   ({ domRef, offsetX, offsetY, ...rest }, ref) => {
     const plane = glStore((s) => s.plane)
 
-    const { sync } = useSyncDomGl(domRef, {
+    const sync = useSyncDomGl(domRef, {
       syncScale: true,
       offsetX,
       offsetY,
     })
+
+    const initRef = useCallback(
+      (el: Mesh) => {
+        if (!el) return
+
+        sync(el)
+        if (ref) ref.current = el
+      },
+      [sync]
+    )
 
     const video = domRef?.current
     const texture = useLoader(TextureLoader, video!.src)
@@ -42,14 +53,7 @@ const WebglVideo = forwardRef<Mesh, Omit<GlVideoProps, 'children'>>(
     })
 
     return (
-      <mesh
-        {...rest}
-        ref={(el: Mesh) => {
-          sync(el)
-          if (ref) ref.current = el
-        }}
-        geometry={plane}
-      >
+      <mesh {...rest} ref={initRef} geometry={plane}>
         <ImageProgram texture={texture} />
       </mesh>
     )

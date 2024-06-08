@@ -1,9 +1,11 @@
-import { Mesh, TextureLoader } from 'ogl'
+import { Mesh, Program, TextureLoader, type MeshOptions } from 'ogl'
 import React, {
-  ReactNode,
-  RefObject,
   Suspense,
   forwardRef,
+  useCallback,
+  useMemo,
+  type ReactNode,
+  type RefObject,
 } from 'react'
 import { useLoader } from 'react-ogl'
 import GlElement from './GlElement'
@@ -12,40 +14,55 @@ import ImageProgram from './programs/ImageProgram'
 import { glStore } from './utils/glStore'
 
 // interface GlImageProps extends MeshProps {
-interface GlImageProps {
+interface GlImageProps
+  extends Pick<
+    MeshOptions,
+    'frustumCulled' | 'renderOrder' | 'mode'
+  > {
   children: ReactNode
+  program?: ({ texture }: { texture: any }) => Program
   domRef: RefObject<HTMLImageElement>
   offsetX?: RefObject<number>
   offsetY?: RefObject<number>
 }
 
 const WebglImage = forwardRef<Mesh, Omit<GlImageProps, 'children'>>(
-  ({ domRef, offsetX, offsetY, ...rest }, ref) => {
+  (
+    { domRef, offsetX, offsetY, program: CustomProgram, ...rest },
+    ref
+  ) => {
     const plane = glStore((s) => s.plane)
 
-    const { sync } = useSyncDomGl(domRef, {
+    const sync = useSyncDomGl(domRef, {
       syncScale: true,
       offsetX,
       offsetY,
     })
 
-    const image = domRef?.current
-    const src = image?.currentSrc || image?.src
+    const src = useMemo(() => {
+      const image = domRef?.current
+      return image?.currentSrc || image?.src
+    }, [domRef])
 
     const texture = useLoader(TextureLoader, src)
 
+    const initRef = useCallback(
+      (mesh: Mesh) => {
+        if (!mesh) return
+
+        sync(mesh)
+        if (ref) ref.current = mesh
+      },
+      [sync]
+    )
+
     return (
-      <mesh
-        // onPointerMove={(e) => console.log(e)}
-        {...rest}
-        ref={(el: Mesh) => {
-          sync(el)
-          if (ref) ref.current = el
-        }}
-        geometry={plane}
-      >
-        {/* <primitive object={plane} /> */}
-        <ImageProgram texture={texture} />
+      <mesh {...rest} ref={initRef} geometry={plane}>
+        {CustomProgram ? (
+          <CustomProgram texture={texture} />
+        ) : (
+          <ImageProgram texture={texture} />
+        )}
       </mesh>
     )
   }

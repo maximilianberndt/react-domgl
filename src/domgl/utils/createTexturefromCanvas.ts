@@ -1,6 +1,6 @@
 import { drawText } from 'canvas-txt'
 import { OGLRenderingContext, Texture } from 'ogl'
-import { RefObject } from 'react'
+import { type RefObject } from 'react'
 
 const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')

@@ -1,4 +1,4 @@
-import { Flowmap, OGLRenderingContext, Program, Vec2 } from 'ogl'
+import { Flowmap, Program, Vec2, type OGLRenderingContext } from 'ogl'
 import React, { useEffect, useRef } from 'react'
 import { useFrame, useOGL } from 'react-ogl'
 import { glStore } from './utils/glStore'

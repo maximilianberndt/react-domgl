@@ -1,10 +1,11 @@
 import { Mesh } from 'ogl'
-import React, {
-  ReactNode,
-  RefObject,
+import {
   Suspense,
   forwardRef,
+  useCallback,
   useMemo,
+  type ReactNode,
+  type RefObject,
 } from 'react'
 import { useOGL } from 'react-ogl'
 import GlElement from './GlElement'
@@ -25,11 +26,19 @@ const WebGlText = forwardRef<Mesh, Omit<GlTextProps, 'children'>>(
     const { gl } = useOGL()
     const plane = glStore((s) => s.plane)
 
-    const { sync } = useSyncDomGl(domRef, {
+    const sync = useSyncDomGl(domRef, {
       syncScale: true,
       offsetX,
       offsetY,
     })
+
+    const initRef = useCallback(
+      (el: Mesh) => {
+        sync(el)
+        if (ref) ref.current = el
+      },
+      [sync]
+    )
 
     const texture = useMemo(
       () => createTextureFromCanvas(domRef, gl),
@@ -37,14 +46,7 @@ const WebGlText = forwardRef<Mesh, Omit<GlTextProps, 'children'>>(
     )
 
     return (
-      <mesh
-        {...rest}
-        ref={(el: Mesh) => {
-          sync(el)
-          if (ref) ref.current = el
-        }}
-        geometry={plane}
-      >
+      <mesh {...rest} ref={initRef} geometry={plane}>
         <ImageProgram texture={texture} transparent={true} />
       </mesh>
     )
